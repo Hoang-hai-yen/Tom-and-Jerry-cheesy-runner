@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Cheese
+  - Obstacle
   layers:
   - Default
   - TransparentFX

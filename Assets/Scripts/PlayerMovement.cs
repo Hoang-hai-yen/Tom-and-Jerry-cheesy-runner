@@ -69,13 +69,13 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow) && desiredLane > 0)
         {
             desiredLane--;
-            anim.SetTrigger("turnLeft");  
+            anim.SetTrigger("turnLeft");
         }
 
         if (Input.GetKeyDown(KeyCode.RightArrow) && desiredLane < 2)
         {
             desiredLane++;
-            anim.SetTrigger("turnRight"); 
+            anim.SetTrigger("turnRight");
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow) && controller.isGrounded && !isSliding)
@@ -111,4 +111,12 @@ public class PlayerMovement : MonoBehaviour
         controller.center = new Vector3(controller.center.x, controller.center.y * 2, controller.center.z);
         anim.SetBool("isSliding", false);
     }
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+{
+    if (hit.collider.CompareTag("Obstacle"))
+    {
+        GameOverManager.instance.TriggerGameOver();
+    }
+}
+
 }
