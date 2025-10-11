@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -14,11 +15,14 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 5f;
     public float gravity = -20f;
     public float slideDuration = 1.0f;
+    public float MagnetRadius = 7f;
 
     private float slideTimer;
     private bool isSliding = false;
     private int desiredLane = 1;
     private float laneXPos = 0f;
+    private bool isMagnetActive = false;
+    private float magnetTimer;
 
     void Start()
     {
@@ -56,6 +60,30 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(direction * Time.deltaTime);
 
         UpdateAnimations();
+        if (isMagnetActive)
+        {
+            magnetTimer -= Time.deltaTime;
+            if (magnetTimer <= 0)
+            {
+                isMagnetActive = false;
+                Debug.Log("Magnet Deactivated");
+            }
+            else
+            {
+                Collider[] hitColliders = Physics.OverlapSphere(transform.position, MagnetRadius);
+                foreach (var hitCollider in hitColliders)
+                {
+                    if (hitCollider.CompareTag("Cheese"))
+                    {
+                        CheeseCollect cheese = hitCollider.GetComponent<CheeseCollect>();
+                        if (cheese != null)
+                        {
+                            cheese.Attract(transform);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void HandleInput()
@@ -112,11 +140,16 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("isSliding", false);
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
-{
-    if (hit.collider.CompareTag("Obstacle"))
     {
-        GameOverManager.instance.TriggerGameOver();
+        if (hit.collider.CompareTag("Obstacle"))
+        {
+            GameOverManager.instance.TriggerGameOver();
+        }
     }
-}
-
+    public void ActivateMagnet(float duration)
+    {
+        isMagnetActive = true;
+        magnetTimer = duration;
+        Debug.Log("Magnet Activated");
+    }
 }
