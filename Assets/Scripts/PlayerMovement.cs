@@ -16,18 +16,29 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -20f;
     public float slideDuration = 1.0f;
     public float MagnetRadius = 7f;
-
+    public GameObject shieldVisual;
+    public GameObject boostVfx; 
+    public float boostSpeedMultiplier = 2f;
     private float slideTimer;
     private bool isSliding = false;
     private int desiredLane = 1;
     private float laneXPos = 0f;
     private bool isMagnetActive = false;
     private float magnetTimer;
+    private bool isShieldActive = false;
+    private bool isBoosting = false;
+    private float boostTimer;
+    private float originalForwardSpeed;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+        originalForwardSpeed = forwardSpeed;
+        if (shieldVisual != null)
+            shieldVisual.SetActive(false);
+        if (boostVfx != null)
+            boostVfx.SetActive(false);
     }
 
     void Update()
@@ -82,6 +93,14 @@ public class PlayerMovement : MonoBehaviour
                         }
                     }
                 }
+            }
+        }
+        if (isBoosting)
+        {
+            boostTimer -= Time.deltaTime;
+            if (boostTimer <= 0)
+            {
+                DeactivateBroomBoost();
             }
         }
     }
@@ -141,9 +160,26 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.collider.CompareTag("Obstacle"))
+       if (hit.collider.CompareTag("Obstacle"))
         {
-            GameOverManager.instance.TriggerGameOver();
+            if (isBoosting)
+            {
+                Destroy(hit.gameObject);
+            }
+            else if (isShieldActive)
+            {
+                isShieldActive = false;
+                if (shieldVisual != null)
+                {
+                    shieldVisual.SetActive(false);
+                }
+                Destroy(hit.gameObject);
+                Debug.Log("Shield was used!");
+            }
+            else
+            {
+                GameOverManager.instance.TriggerGameOver();
+            }
         }
     }
     public void ActivateMagnet(float duration)
@@ -151,5 +187,40 @@ public class PlayerMovement : MonoBehaviour
         isMagnetActive = true;
         magnetTimer = duration;
         Debug.Log("Magnet Activated");
+    }
+    public void ActivateShield()
+    {
+        isShieldActive = true;
+        if (shieldVisual != null)
+        {
+            shieldVisual.SetActive(true);
+        }
+        Debug.Log("Shield Activated!");
+    }
+    public void ActivateBroomBoost(float duration)
+    {
+        if (isBoosting) return; 
+
+        isBoosting = true;
+        boostTimer = duration;
+
+        forwardSpeed *= boostSpeedMultiplier;
+
+        if (boostVfx != null)
+            boostVfx.SetActive(true);
+
+        Debug.Log("Broom Boost Activated!");
+    }
+
+    private void DeactivateBroomBoost()
+    {
+        isBoosting = false;
+
+        forwardSpeed = originalForwardSpeed;
+
+        if (boostVfx != null)
+            boostVfx.SetActive(false);
+
+        Debug.Log("Broom Boost Deactivated!");
     }
 }
