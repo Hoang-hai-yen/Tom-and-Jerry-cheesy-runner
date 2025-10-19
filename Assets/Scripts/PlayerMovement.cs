@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -14,16 +15,30 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 5f;
     public float gravity = -20f;
     public float slideDuration = 1.0f;
-
+    public float MagnetRadius = 7f;
+    public GameObject shieldVisual;
+    public ParticleSystem boostVfx;
+    public float boostSpeedMultiplier = 2f;
     private float slideTimer;
     private bool isSliding = false;
     private int desiredLane = 1;
     private float laneXPos = 0f;
+    private bool isMagnetActive = false;
+    private float magnetTimer;
+    private bool isShieldActive = false;
+    private bool isBoosting = false;
+    private float boostTimer;
+    private float originalForwardSpeed;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+        originalForwardSpeed = forwardSpeed;
+        if (shieldVisual != null)
+            shieldVisual.SetActive(false);
+        if (boostVfx != null)
+            boostVfx.Stop();
     }
 
     void Update()
@@ -56,6 +71,38 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(direction * Time.deltaTime);
 
         UpdateAnimations();
+        if (isMagnetActive)
+        {
+            magnetTimer -= Time.deltaTime;
+            if (magnetTimer <= 0)
+            {
+                isMagnetActive = false;
+                Debug.Log("Magnet Deactivated");
+            }
+            else
+            {
+                Collider[] hitColliders = Physics.OverlapSphere(transform.position, MagnetRadius);
+                foreach (var hitCollider in hitColliders)
+                {
+                    if (hitCollider.CompareTag("Cheese"))
+                    {
+                        CheeseCollect cheese = hitCollider.GetComponent<CheeseCollect>();
+                        if (cheese != null)
+                        {
+                            cheese.Attract(transform);
+                        }
+                    }
+                }
+            }
+        }
+        if (isBoosting)
+        {
+            boostTimer -= Time.deltaTime;
+            if (boostTimer <= 0)
+            {
+                DeactivateBroomBoost();
+            }
+        }
     }
 
     private void HandleInput()
@@ -112,11 +159,67 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("isSliding", false);
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
-{
-    if (hit.collider.CompareTag("Obstacle"))
     {
-        GameOverManager.instance.TriggerGameOver();
+       if (hit.collider.CompareTag("Obstacle"))
+        {
+            if (isBoosting)
+            {
+                Destroy(hit.gameObject);
+            }
+            else if (isShieldActive)
+            {
+                isShieldActive = false;
+                if (shieldVisual != null)
+                {
+                    shieldVisual.SetActive(false);
+                }
+                Destroy(hit.gameObject);
+                Debug.Log("Shield was used!");
+            }
+            else
+            {
+                GameOverManager.instance.TriggerGameOver();
+            }
+        }
     }
-}
+    public void ActivateMagnet(float duration)
+    {
+        isMagnetActive = true;
+        magnetTimer = duration;
+        Debug.Log("Magnet Activated");
+    }
+    public void ActivateShield()
+    {
+        isShieldActive = true;
+        if (shieldVisual != null)
+        {
+            shieldVisual.SetActive(true);
+        }
+        Debug.Log("Shield Activated!");
+    }
+    public void ActivateBroomBoost(float duration)
+    {
+        if (isBoosting) return; 
 
+        isBoosting = true;
+        boostTimer = duration;
+
+        forwardSpeed *= boostSpeedMultiplier;
+
+        if (boostVfx != null)
+            boostVfx.Play();
+
+        Debug.Log("Broom Boost Activated!");
+    }
+
+    private void DeactivateBroomBoost()
+    {
+        isBoosting = false;
+
+        forwardSpeed = originalForwardSpeed;
+
+        if (boostVfx != null)
+            boostVfx.Stop();
+        Debug.Log("Broom Boost Deactivated!");
+    }
 }
