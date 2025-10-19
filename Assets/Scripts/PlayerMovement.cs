@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public float slideDuration = 1.0f;
     public float MagnetRadius = 7f;
     public GameObject shieldVisual;
-    public GameObject boostVfx; 
+    public ParticleSystem boostVfx;
     public float boostSpeedMultiplier = 2f;
     private float slideTimer;
     private bool isSliding = false;
@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
         if (shieldVisual != null)
             shieldVisual.SetActive(false);
         if (boostVfx != null)
-            boostVfx.SetActive(false);
+            boostVfx.Stop();
     }
 
     void Update()
@@ -207,7 +207,7 @@ public class PlayerMovement : MonoBehaviour
         forwardSpeed *= boostSpeedMultiplier;
 
         if (boostVfx != null)
-            boostVfx.SetActive(true);
+            boostVfx.Play();
 
         Debug.Log("Broom Boost Activated!");
     }
@@ -219,8 +219,7 @@ public class PlayerMovement : MonoBehaviour
         forwardSpeed = originalForwardSpeed;
 
         if (boostVfx != null)
-            boostVfx.SetActive(false);
-
+            boostVfx.Stop();
         Debug.Log("Broom Boost Deactivated!");
     }
 }
