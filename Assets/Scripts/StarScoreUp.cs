@@ -9,14 +9,22 @@ public class StarScoreUp : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // Gọi hàm kích hoạt nhân điểm trên ScoreManager
             if (ScoreManager.instance != null)
             {
                 ScoreManager.instance.ActivateScoreMultiplier(multiplier, duration);
             }
             
-            // Phá hủy item sau khi nhặt
-            Destroy(gameObject);
+            ItemIdentifier identifier = GetComponent<ItemIdentifier>();
+            if (identifier != null && identifier.itemTag != null)
+            {
+                string itemTag = identifier.itemTag;
+                ItemPoolManager.instance.ReturnItem(itemTag, gameObject);
+            }
+            else
+            {
+                Debug.LogWarning("Item này không có Tag Pool, đang Destroy thay vì trả về Pool.");
+                Destroy(gameObject);
+            }
         }
     }
 }

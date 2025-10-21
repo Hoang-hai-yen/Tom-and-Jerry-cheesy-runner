@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Cheese
   - Obstacle
+  - Drink
+  - Magnet
+  - Heartx2
+  - Shield
   layers:
   - Default
   - TransparentFX
