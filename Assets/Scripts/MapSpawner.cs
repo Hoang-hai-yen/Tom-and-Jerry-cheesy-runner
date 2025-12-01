@@ -105,6 +105,13 @@ public class MapSpawner : MonoBehaviour
 
     void ReturnChunk(GameObject chunk)
     {
+        ChunkPatternSpawner patternSpawner = chunk.GetComponent<ChunkPatternSpawner>();
+        if (patternSpawner != null)
+        {
+  
+            patternSpawner.PrepareForDespawn(); 
+        }
+
         string key = chunk.name;
 
         chunk.SetActive(false);

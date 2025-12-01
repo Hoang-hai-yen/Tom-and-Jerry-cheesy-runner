@@ -23,7 +23,7 @@ public class ChunkPatternSpawner : MonoBehaviour
         SpawnPatterns();
     }
 
-    void OnDisable()
+    public void PrepareForDespawn()
     {
         ReturnActivePatternsToPool();
     }
@@ -50,7 +50,7 @@ public class ChunkPatternSpawner : MonoBehaviour
         }
     }
 
-    void ReturnActivePatternsToPool()
+    public void ReturnActivePatternsToPool()
     {
         if (patternLinks == null) return;
 
