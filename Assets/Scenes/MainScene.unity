@@ -5875,8 +5875,8 @@ MonoBehaviour:
   - {fileID: 5930691927396698696, guid: 8c0199032cb7b0a47a949bed09f8cfc1, type: 3}
   playerTransform: {fileID: 2102500694}
   initialChunks: 3
-  spawnDistanceAhead: 50
-  despawnDistanceBehind: 30
+  spawnDistanceAhead: 100
+  despawnDistanceBehind: 100
 --- !u!1 &1750211118
 GameObject:
   m_ObjectHideFlags: 0
@@ -6314,19 +6314,19 @@ MonoBehaviour:
   pools:
   - tag: Cheese
     prefab: {fileID: 6432578735348947608, guid: e6e8a2a37433847408e33570524d7811, type: 3}
-    initialSize: 100
+    size: 50
   - tag: Drink
     prefab: {fileID: 8654550357904810027, guid: 79bcd4120a287e24fbfdbd714e9f8d91, type: 3}
-    initialSize: 10
+    size: 10
   - tag: Heartx2
     prefab: {fileID: 6651398944117912314, guid: 6cd8b56bb2c4fab46a2e92703437ceed, type: 3}
-    initialSize: 10
+    size: 10
   - tag: Magnet
     prefab: {fileID: 5751975310784969786, guid: 4575deaaecf93f940a484f6c1d453ba5, type: 3}
-    initialSize: 10
+    size: 10
   - tag: Shield
     prefab: {fileID: 4508160602214199778, guid: d9ba3e8d7aa5c6541b302551df156ad7, type: 3}
-    initialSize: 10
+    size: 10
 --- !u!4 &1981086488
 Transform:
   m_ObjectHideFlags: 0

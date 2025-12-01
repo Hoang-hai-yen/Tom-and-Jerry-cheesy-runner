@@ -19,13 +19,11 @@ public class PatternSpawner : MonoBehaviour
     {
         SpawnAllItems();
     }
-
-    void OnDisable()
+    public void PrepareForDespawn()
     {
         DespawnAllItems();
     }
-
-private void SpawnAllItems()
+    private void SpawnAllItems()
     {
         if (spawnPoints == null || spawnPoints.Count == 0) return;
 
@@ -52,33 +50,26 @@ private void SpawnAllItems()
 
     private void DespawnAllItems()
     {
-        if (activeItems == null) return;
-
         foreach (var item in activeItems)
         {
             if (item == null) continue;
 
             ItemTagHolder tagHolder = item.GetComponent<ItemTagHolder>();
-            if (tagHolder != null && !string.IsNullOrEmpty(tagHolder.itemTag))
+
+            if (tagHolder != null)
             {
-                if (ItemPoolManager.instance != null)
-                {
-                    ItemPoolManager.instance.ReturnItem(tagHolder.itemTag, item);
-                }
-                else
-                {
-                    Destroy(item);
-                }
+                item.transform.SetParent(null); 
+                ItemPoolManager.instance.ReturnItem(tagHolder.itemTag, item);
             }
             else
             {
                 item.SetActive(false);
+                item.transform.SetParent(null);
             }
         }
 
         activeItems.Clear();
     }
-
 
     public void CleanupBehindPlayer(float playerZ)
     {

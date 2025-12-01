@@ -23,8 +23,9 @@ public class ItemPoolManager : MonoBehaviour
         instance = this;
 
         poolDict = new Dictionary<string, Queue<GameObject>>();
+
         poolHolder = new GameObject("ITEM_POOL").transform;
-        poolHolder.SetParent(transform);
+        poolHolder.parent = null;   // ⭐ KHÔNG BAO GIỜ ĐƯỢC LÀ CON CỦA MAP/CHUNK
 
         foreach (var p in pools)
         {
@@ -90,13 +91,7 @@ public class ItemPoolManager : MonoBehaviour
         poolDict[tag].Enqueue(obj);
     }
 
-    public GameObject GetItem(string tag)
-    {
-        return Get(tag);
-    }
+    public GameObject GetItem(string tag) => Get(tag);
 
-    public void ReturnItem(string tag, GameObject obj)
-    {
-        Return(tag, obj);
-    }
+    public void ReturnItem(string tag, GameObject obj) => Return(tag, obj);
 }
