@@ -1977,6 +1977,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2605132880484074376}
   - component: {fileID: 8338421800085019769}
+  - component: {fileID: 8325841967320175154}
   m_Layer: 0
   m_Name: MapChunk_Livingroom
   m_TagString: Untagged
@@ -2054,21 +2055,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   patternLinks:
-  - description: 3 lane
-    anchorPoint: {fileID: 742350894467239324}
-    spawnablePatterns:
-    - {fileID: 6118888463404426377, guid: f780599380250964c8f24ed080d6577e, type: 3}
-    spawnChance: 80
-  - description: 1 lane
-    anchorPoint: {fileID: 3620249905040243445}
-    spawnablePatterns:
-    - {fileID: 412492468388149045, guid: 89710ad2bc84a6447af5a9c89584319d, type: 3}
-    spawnChance: 80
-  - description: 1 lane
-    anchorPoint: {fileID: 4674013072421331644}
-    spawnablePatterns:
-    - {fileID: 6118888463404426377, guid: f780599380250964c8f24ed080d6577e, type: 3}
-    spawnChance: 80
+  - description: 
+    anchorPoint: {fileID: 0}
+    poolTag: 
+    spawnChance: 0
+--- !u!114 &8325841967320175154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5930691927396698696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2775a2b2715338d449351ce893139b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laneCount: 3
+  laneWidth: 2
+  spawnPoints:
+  - {fileID: 0}
+  despawnZ: -50
 --- !u!1 &6033180139491496058
 GameObject:
   m_ObjectHideFlags: 0
@@ -2444,6 +2451,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 742350894467239324}
+  - component: {fileID: 807032942791127840}
   m_Layer: 0
   m_Name: PatternAnchor_A
   m_TagString: Untagged
@@ -2466,6 +2474,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2605132880484074376}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &807032942791127840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6952482674504173216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98e8836156111974193580d2b9a78a6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemTag: 
+  spawnChance: 100
 --- !u!1 &7535589445841963834
 GameObject:
   m_ObjectHideFlags: 0

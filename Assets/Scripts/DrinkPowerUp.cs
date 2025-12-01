@@ -2,29 +2,30 @@ using UnityEngine;
 
 public class DrinkPowerUp : MonoBehaviour
 {
-    public float duration = 8f; 
+    public float duration = 8f;
+
+    void OnEnable()
+    {
+        ParticleSystem ps = GetComponent<ParticleSystem>();
+        if (ps != null) ps.Play();
+    }
 
     private void OnTriggerEnter(Collider other)
-{
-    if (other.CompareTag("Player"))
     {
+        if (!other.CompareTag("Player")) return;
+
         PlayerMovement player = other.GetComponent<PlayerMovement>();
         if (player != null)
-        {
             player.ActivateBroomBoost(duration);
-        }
 
-        ItemIdentifier identifier = GetComponent<ItemIdentifier>();
-        if (identifier != null && identifier.itemTag != null)
+        ItemTagHolder tagHolder = GetComponent<ItemTagHolder>();
+        if (tagHolder != null && !string.IsNullOrEmpty(tagHolder.itemTag))
         {
-            string itemTag = identifier.itemTag;
-            ItemPoolManager.instance.ReturnItem(itemTag, gameObject);
+            ItemPoolManager.instance.ReturnItem(tagHolder.itemTag, gameObject);
         }
         else
         {
-            Debug.LogWarning("Item này không có Tag Pool, đang Destroy thay vì trả về Pool.");
             Destroy(gameObject);
         }
     }
-}
 }

@@ -88,6 +88,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5c6ce47c010b5be49a55202d4c9ba77a, type: 3}
       insertIndex: -1
       addedObject: {fileID: -4632260060925514585}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5c6ce47c010b5be49a55202d4c9ba77a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -829157845710947381}
   m_SourcePrefab: {fileID: 100100000, guid: 5c6ce47c010b5be49a55202d4c9ba77a, type: 3}
 --- !u!1 &6432578735348947608 stripped
 GameObject:
@@ -169,3 +172,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attractionSpeed: 15
+--- !u!114 &-829157845710947381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6432578735348947608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6f4fb010c5e664baeacdbdcfaeb4cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemTag: Cheese

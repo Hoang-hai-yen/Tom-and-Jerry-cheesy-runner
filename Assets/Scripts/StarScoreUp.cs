@@ -3,28 +3,28 @@ using UnityEngine;
 public class StarScoreUp : MonoBehaviour
 {
     public int multiplier = 2;
-    public float duration = 10f; 
+    public float duration = 10f;
+
+    void OnEnable()
+    {
+        ParticleSystem ps = GetComponent<ParticleSystem>();
+        if (ps != null) ps.Play();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (!other.CompareTag("Player")) return;
+
+        ScoreManager.instance?.ActivateScoreMultiplier(multiplier, duration);
+
+        ItemTagHolder tagHolder = GetComponent<ItemTagHolder>();
+        if (tagHolder != null && !string.IsNullOrEmpty(tagHolder.itemTag))
         {
-            if (ScoreManager.instance != null)
-            {
-                ScoreManager.instance.ActivateScoreMultiplier(multiplier, duration);
-            }
-            
-            ItemIdentifier identifier = GetComponent<ItemIdentifier>();
-            if (identifier != null && identifier.itemTag != null)
-            {
-                string itemTag = identifier.itemTag;
-                ItemPoolManager.instance.ReturnItem(itemTag, gameObject);
-            }
-            else
-            {
-                Debug.LogWarning("Item này không có Tag Pool, đang Destroy thay vì trả về Pool.");
-                Destroy(gameObject);
-            }
+            ItemPoolManager.instance.ReturnItem(tagHolder.itemTag, gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }

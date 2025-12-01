@@ -1,12 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-// CẤP 1: QUẢN LÝ KHÚC ĐƯỜNG
 public class MapSpawner : MonoBehaviour
 {
     [Header("Map Prefabs")]
     public GameObject startChunk;
-    public GameObject[] mapChunkPrefabs; 
+    public GameObject[] mapChunkPrefabs;
 
     [Header("Player Settings")]
     public Transform playerTransform;
@@ -14,35 +13,29 @@ public class MapSpawner : MonoBehaviour
     [Header("Spawning Settings")]
     public int initialChunks = 1;
     public float spawnDistanceAhead = 100f;
-    public float despawnDistanceBehind = 30f;
+    public float despawnDistanceBehind = 40f;
 
     private Dictionary<string, Queue<GameObject>> pool = new Dictionary<string, Queue<GameObject>>();
-    private GameObject poolHolder;
+    private Transform poolHolder;
 
     private List<GameObject> activeChunks = new List<GameObject>();
-    private Transform nextConnectionPoint; 
+    private Transform nextConnectionPoint;
     private float lastPlayerZ = -Mathf.Infinity;
 
     void Awake()
     {
         if (playerTransform == null)
-        {
             playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        }
 
         InitializePoolHolder();
 
-        GameObject initialChunk = GetChunkFromPool(startChunk);
-        initialChunk.transform.position = Vector3.zero;
-        initialChunk.transform.rotation = Quaternion.identity;
-        activeChunks.Add(initialChunk);
+        GameObject initialChunk = SpawnNewChunk(startChunk, Vector3.zero, Quaternion.identity);
         nextConnectionPoint = initialChunk.transform.Find("ConnectionPoint");
 
-        for (int i = 0; i < initialChunks; i++)
-        {
-            SpawnChunk();
-        }
         lastPlayerZ = playerTransform.position.z;
+
+        for (int i = 1; i < initialChunks; i++)
+            SpawnChunk();
     }
 
     void Update()
@@ -51,97 +44,100 @@ public class MapSpawner : MonoBehaviour
         {
             lastPlayerZ = playerTransform.position.z;
 
-            if (nextConnectionPoint != null &&
-                playerTransform.position.z > (nextConnectionPoint.position.z - spawnDistanceAhead))
-            {
+            if (playerTransform.position.z > nextConnectionPoint.position.z - spawnDistanceAhead)
                 SpawnChunk();
-            }
 
             CleanupOldChunks();
         }
     }
 
-    private void SpawnChunk()
+
+    void SpawnChunk()
     {
-        GameObject randomPrefab = mapChunkPrefabs[Random.Range(0, mapChunkPrefabs.Length)];
+        GameObject prefab = mapChunkPrefabs[Random.Range(0, mapChunkPrefabs.Length)];
 
-        GameObject newChunk = GetChunkFromPool(randomPrefab);
-        
-        newChunk.transform.position = nextConnectionPoint.position;
-        newChunk.transform.rotation = nextConnectionPoint.rotation;
+        GameObject chunk = GetChunk(prefab);
 
-        activeChunks.Add(newChunk);
+        chunk.transform.position = nextConnectionPoint.position;
+        chunk.transform.rotation = nextConnectionPoint.rotation;
 
-        nextConnectionPoint = newChunk.transform.Find("ConnectionPoint");
+        activeChunks.Add(chunk);
 
+        nextConnectionPoint = chunk.transform.Find("ConnectionPoint");
         if (nextConnectionPoint == null)
-        {
-            Debug.LogError("LỖI: Prefab " + newChunk.name + " không có 'ConnectionPoint'!");
-        }
+            Debug.LogError("Prefab thiếu ConnectionPoint: " + chunk.name);
     }
 
-    private void CleanupOldChunks()
+    GameObject SpawnNewChunk(GameObject prefab, Vector3 pos, Quaternion rot)
     {
-        List<GameObject> chunksToReturn = new List<GameObject>();
-        foreach (GameObject chunk in activeChunks)
-        {
-            Transform connection = chunk.transform.Find("ConnectionPoint");
-            if (connection == null) continue;
+        GameObject chunk = GetChunk(prefab);
 
-            if (connection.position.z < (playerTransform.position.z - despawnDistanceBehind))
-            {
-                chunksToReturn.Add(chunk);
-            }
-        }
+        chunk.transform.position = pos;
+        chunk.transform.rotation = rot;
 
-        foreach (GameObject chunk in chunksToReturn)
-        {
-            activeChunks.Remove(chunk);
-            ReturnChunkToPool(chunk); 
-        }
+        activeChunks.Add(chunk);
+
+        return chunk;
     }
 
 
-    private GameObject GetChunkFromPool(GameObject prefab)
+    GameObject GetChunk(GameObject prefab)
     {
-        string poolKey = prefab.name;
-        
-        if (pool.ContainsKey(poolKey) && pool[poolKey].Count > 0)
+        string key = prefab.name;
+
+        if (!pool.ContainsKey(key))
+            pool[key] = new Queue<GameObject>();
+
+        if (pool[key].Count > 0)
         {
-            GameObject chunk = pool[poolKey].Dequeue();
+            GameObject chunk = pool[key].Dequeue();
             chunk.SetActive(true);
+            chunk.transform.SetParent(null); 
+            ResetChunk(chunk);
             return chunk;
         }
-        else
-        {
-            GameObject newChunk = Instantiate(prefab);
-            newChunk.name = poolKey; 
-            newChunk.transform.SetParent(poolHolder.transform); 
-            newChunk.SetActive(false); 
-            ReturnChunkToPool(newChunk);
-            
-            GameObject chunk = pool[poolKey].Dequeue();
-            chunk.SetActive(true);
-            return chunk;
-        }
+
+        GameObject newChunk = Instantiate(prefab);
+        newChunk.name = key;
+        ResetChunk(newChunk);
+        return newChunk;
     }
 
-    private void ReturnChunkToPool(GameObject chunk)
+    void ReturnChunk(GameObject chunk)
     {
-        string poolKey = chunk.name;
+        string key = chunk.name;
+
         chunk.SetActive(false);
-        chunk.transform.SetParent(poolHolder.transform);
-
-        if (!pool.ContainsKey(poolKey))
-        {
-            pool[poolKey] = new Queue<GameObject>();
-        }
-        pool[poolKey].Enqueue(chunk);
+        chunk.transform.SetParent(poolHolder); 
+        pool[key].Enqueue(chunk);
     }
 
-    private void InitializePoolHolder()
+    void ResetChunk(GameObject chunk)
     {
-        poolHolder = new GameObject("RoadSegmentPool");
-        poolHolder.transform.SetParent(this.transform);
+        chunk.transform.localScale = Vector3.one;
+    }
+
+    void CleanupOldChunks()
+    {
+        List<GameObject> toReturn = new List<GameObject>();
+
+        foreach (var chunk in activeChunks)
+        {
+            if (chunk.transform.position.z < playerTransform.position.z - despawnDistanceBehind)
+                toReturn.Add(chunk);
+        }
+
+        foreach (var c in toReturn)
+        {
+            activeChunks.Remove(c);
+            ReturnChunk(c);
+        }
+    }
+
+    void InitializePoolHolder()
+    {
+        GameObject obj = new GameObject("RoadSegmentPool");
+        obj.transform.SetParent(transform);
+        poolHolder = obj.transform;
     }
 }

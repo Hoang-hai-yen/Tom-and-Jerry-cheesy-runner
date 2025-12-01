@@ -2,49 +2,52 @@ using UnityEngine;
 
 public class CheeseCollect : MonoBehaviour
 {
-    public float attractionSpeed = 15;
+    public float attractionSpeed = 15f;
     private bool isAttracted = false;
     private Transform playerTarget;
-    
-    void OnDisable()
+
+    void OnEnable()
     {
         isAttracted = false;
         playerTarget = null;
+
+        ParticleSystem ps = GetComponent<ParticleSystem>();
+        if (ps != null) ps.Play();
+
     }
 
     void Update()
     {
         if (isAttracted && playerTarget != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, playerTarget.position, attractionSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                playerTarget.position,
+                attractionSpeed * Time.deltaTime
+            );
         }
     }
-    
+
     public void Attract(Transform player)
     {
         isAttracted = true;
         playerTarget = player;
     }
-    
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            if (ScoreManager.instance != null)
-            {
-                ScoreManager.instance.AddCheese(1);
-            }
 
-            ItemIdentifier identifier = GetComponent<ItemIdentifier>();
-            if (identifier != null && identifier.itemTag != null)
-            {
-                ItemPoolManager.instance.ReturnItem(identifier.itemTag, gameObject);
-            }
-            else
-            {
-                Debug.LogWarning("Cheese này không có Tag Pool, đang Destroy thay vì trả về Pool.");
-                Destroy(gameObject);
-            }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
+
+        ScoreManager.instance?.AddCheese(1);
+
+        ItemTagHolder tagHolder = GetComponent<ItemTagHolder>();
+        if (tagHolder != null && !string.IsNullOrEmpty(tagHolder.itemTag))
+        {
+            ItemPoolManager.instance.ReturnItem(tagHolder.itemTag, gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5985110238494216973}
   - component: {fileID: 5716580665243790451}
   - component: {fileID: 7030084125075595076}
+  - component: {fileID: -1212835179674373348}
   m_Layer: 0
   m_Name: EnergyDrink
   m_TagString: Drink
@@ -111,6 +112,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 8
+--- !u!114 &-1212835179674373348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8654550357904810027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6f4fb010c5e664baeacdbdcfaeb4cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemTag: Drink
 --- !u!1001 &8755836753024028968
 PrefabInstance:
   m_ObjectHideFlags: 0

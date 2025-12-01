@@ -8,78 +8,95 @@ public class ItemPoolManager : MonoBehaviour
     [System.Serializable]
     public class Pool
     {
-        public string tag; 
+        public string tag;
         public GameObject prefab;
-        public int initialSize; 
+        public int size;
     }
 
-    public List<Pool> pools; 
-    
-    private Dictionary<string, Queue<GameObject>> poolDictionary;
-    private GameObject poolHolder;
+    public List<Pool> pools;
 
+    private Dictionary<string, Queue<GameObject>> poolDict;
+    private Transform poolHolder;
 
     void Awake()
     {
         instance = this;
-        poolDictionary = new Dictionary<string, Queue<GameObject>>();
-        
-        poolHolder = new GameObject("ItemPoolHolder");
-        poolHolder.transform.SetParent(this.transform);
 
-        foreach (Pool pool in pools)
+        poolDict = new Dictionary<string, Queue<GameObject>>();
+        poolHolder = new GameObject("ITEM_POOL").transform;
+        poolHolder.SetParent(transform);
+
+        foreach (var p in pools)
         {
-            Queue<GameObject> objectQueue = new Queue<GameObject>();
-            for (int i = 0; i < pool.initialSize; i++)
+            Queue<GameObject> q = new Queue<GameObject>();
+
+            for (int i = 0; i < p.size; i++)
             {
-                GameObject obj = Instantiate(pool.prefab);
-                obj.SetActive(false); 
-                obj.transform.SetParent(poolHolder.transform);
-                objectQueue.Enqueue(obj);
+                GameObject obj = Instantiate(p.prefab, poolHolder);
+                obj.SetActive(false);
+                q.Enqueue(obj);
             }
-            poolDictionary.Add(pool.tag, objectQueue);
+
+            poolDict.Add(p.tag, q);
         }
     }
 
-    public GameObject GetItem(string tag, Vector3 position, Quaternion rotation)
+    public GameObject Get(string tag)
     {
-        if (!poolDictionary.ContainsKey(tag))
+        if (!poolDict.ContainsKey(tag))
         {
-            Debug.LogWarning("Pool với tag " + tag + " không tồn tại.");
+            Debug.LogWarning($"Pool '{tag}' không tồn tại!");
             return null;
         }
 
-        GameObject objectToSpawn;
-
-        if (poolDictionary[tag].Count > 0)
+        if (poolDict[tag].Count == 0)
         {
-            objectToSpawn = poolDictionary[tag].Dequeue();
-        }
-        else
-        {
-            Debug.LogWarning("Pool " + tag + " bị hết! Đang tạo thêm.");
-            Pool p = pools.Find(pool => pool.tag == tag);
-            objectToSpawn = Instantiate(p.prefab);
+            Pool p = pools.Find(x => x.tag == tag);
+            if (p != null)
+            {
+                GameObject newObj = Instantiate(p.prefab);
+                newObj.SetActive(true);
+                newObj.transform.SetParent(null);
+                return newObj;
+            }
+
+            Debug.LogWarning($"Pool '{tag}' trống và không tìm thấy prefab để tạo thêm.");
+            return null;
         }
 
-        objectToSpawn.transform.position = position;
-        objectToSpawn.transform.rotation = rotation;
-        objectToSpawn.transform.SetParent(null); 
-        objectToSpawn.SetActive(true); 
-        return objectToSpawn;
+        GameObject obj = poolDict[tag].Dequeue();
+
+        obj.transform.SetParent(null);      
+        obj.SetActive(true);
+
+        return obj;
     }
 
-    public void ReturnItem(string tag, GameObject objectToReturn)
+    public void Return(string tag, GameObject obj)
     {
-        if (!poolDictionary.ContainsKey(tag))
+        if (!poolDict.ContainsKey(tag))
         {
-            Debug.LogWarning("Pool với tag " + tag + " không tồn tại. Hủy đối tượng.");
-            Destroy(objectToReturn);
+            Debug.LogWarning($"Pool '{tag}' không tồn tại — Destroy object.");
+            Destroy(obj);
             return;
         }
 
-        objectToReturn.SetActive(false); 
-        objectToReturn.transform.SetParent(poolHolder.transform); 
-        poolDictionary[tag].Enqueue(objectToReturn);
+        obj.SetActive(false);
+
+        obj.transform.SetParent(poolHolder);
+        obj.transform.localPosition = Vector3.zero;
+        obj.transform.localRotation = Quaternion.identity;
+
+        poolDict[tag].Enqueue(obj);
+    }
+
+    public GameObject GetItem(string tag)
+    {
+        return Get(tag);
+    }
+
+    public void ReturnItem(string tag, GameObject obj)
+    {
+        Return(tag, obj);
     }
 }
