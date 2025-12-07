@@ -5872,7 +5872,6 @@ MonoBehaviour:
   startChunk: {fileID: 5930691927396698696, guid: 60efa5bc133c10b4aba4d04f5be26bbe, type: 3}
   mapChunkPrefabs:
   - {fileID: 5930691927396698696, guid: 60efa5bc133c10b4aba4d04f5be26bbe, type: 3}
-  - {fileID: 5930691927396698696, guid: 8c0199032cb7b0a47a949bed09f8cfc1, type: 3}
   playerTransform: {fileID: 2102500694}
   initialChunks: 3
   spawnDistanceAhead: 100
