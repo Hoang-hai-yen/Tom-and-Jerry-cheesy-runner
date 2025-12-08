@@ -51,7 +51,7 @@ public class ScoreManager : MonoBehaviour
         if (cheeseText != null)
         {
             string multiplierText = (isMultiplierActive) ? $" (x{scoreMultiplier})" : "";
-            cheeseText.text = "Cheese: " + cheeseCount + multiplierText;
+            cheeseText.text = cheeseCount + multiplierText;
         }
     }
 
