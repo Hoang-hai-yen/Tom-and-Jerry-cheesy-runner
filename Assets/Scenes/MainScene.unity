@@ -7787,6 +7787,9 @@ MonoBehaviour:
   - tag: Shield
     prefab: {fileID: 4508160602214199778, guid: d9ba3e8d7aa5c6541b302551df156ad7, type: 3}
     size: 10
+  - tag: MovingObstacle
+    prefab: {fileID: 3167417563247420515, guid: 299ced6117683db42afac7ef474ba1b2, type: 3}
+    size: 10
 --- !u!4 &1981086488
 Transform:
   m_ObjectHideFlags: 0

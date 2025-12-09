@@ -287,4 +287,26 @@ public class PlayerMovement : MonoBehaviour
         if (controller.isGrounded && anim.GetBool("isJumping"))
             anim.SetBool("isJumping", false);
     }
+    private void OnDrawGizmos()
+    {
+        if (laneDistance == 0f) return;
+
+        Gizmos.color = Color.yellow; 
+
+        float gizmoLength = 100f; 
+        
+        float startZ = transform.position.z - gizmoLength / 2f; 
+        
+        float endZ = transform.position.z + gizmoLength / 2f + 10f; 
+
+        for (int i = 0; i < 3; i++)
+        {
+            float laneX = (i - 1) * laneDistance; 
+
+            Vector3 startPoint = new Vector3(laneX, transform.position.y, startZ);
+            Vector3 endPoint = new Vector3(laneX, transform.position.y, endZ);
+
+            Gizmos.DrawLine(startPoint, endPoint);
+        }
+    }
 }
