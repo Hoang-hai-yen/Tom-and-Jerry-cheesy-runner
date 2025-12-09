@@ -32,7 +32,7 @@ public class GameOverManager : MonoBehaviour
         if (finalCheeseText != null)
         {
             int finalScore = ScoreManager.instance.GetScore();
-            finalCheeseText.text = "Cheese: " + finalScore;
+            finalCheeseText.text = "" + finalScore;
         }
     }
 

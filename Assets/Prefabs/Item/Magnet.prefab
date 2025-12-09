@@ -150,7 +150,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 090c0e1e0f5135441b811ae7a6420c43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 10
+  duration: 3
+  magnetUI: {fileID: 0}
+  fadedAlpha: 0.6
+  fullAlpha: 1
 --- !u!114 &3101260564096988811
 MonoBehaviour:
   m_ObjectHideFlags: 0
