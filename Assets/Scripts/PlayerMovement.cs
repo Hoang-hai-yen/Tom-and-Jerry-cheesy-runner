@@ -1,54 +1,83 @@
-using NUnit.Framework;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
     private CharacterController controller;
-    private Vector3 direction;
     private Animator anim;
 
+    private Vector3 direction;
+
     [Header("Movement Parameters")]
-    public float forwardSpeed = 10f;
-    public float laneSpeed = 5f;
+    public float baseForwardSpeed = 10f;
+    public float laneSpeed = 10f;
     public float laneDistance = 3f;
     public float jumpForce = 5f;
     public float gravity = -20f;
-    public float slideDuration = 1.0f;
-    public float MagnetRadius = 7f;
-    public GameObject shieldVisual;
-    public ParticleSystem boostVfx;
-    public float boostSpeedMultiplier = 2f;
+    public float maxFallSpeed = -30f;
+
+    private int desiredLane = 1;
+    private float targetLaneX;
+
+    [Header("Slide Parameters")]
+    public float slideDuration = 1f;
     private float slideTimer;
     private bool isSliding = false;
-    private int desiredLane = 1;
-    private float laneXPos = 0f;
+    private float originalHeight;
+    private Vector3 originalCenter;
+
+    [Header("Magnet")]
+    public float magnetRadius = 7f;
     private bool isMagnetActive = false;
     private float magnetTimer;
-    private bool isShieldActive = false;
+
+    [Header("Shield Settings")]
+    public bool isShieldActive = false;
+    public GameObject shieldVisual;
+
+    [Header("Boost Settings")]
+    public float boostSpeedMultiplier = 2f;
     private bool isBoosting = false;
     private float boostTimer;
-    private float originalForwardSpeed;
 
-    void Start()
+    private float currentForwardSpeed;
+
+    [Header("VFX")]
+    public ParticleSystem boostVfx;
+
+
+    private void Start()
     {
         controller = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
-        originalForwardSpeed = forwardSpeed;
-        if (shieldVisual != null)
-            shieldVisual.SetActive(false);
-        if (boostVfx != null)
-            boostVfx.Stop();
+
+        originalHeight = controller.height;
+        originalCenter = controller.center;
+
+        currentForwardSpeed = baseForwardSpeed;
+
+        if (shieldVisual != null) shieldVisual.SetActive(false);
+        if (boostVfx != null) boostVfx.Stop();
     }
 
-    void Update()
+    private void Update()
     {
-        if (isSliding)
-        {
-            slideTimer -= Time.deltaTime;
-            if (slideTimer <= 0) EndSlide();
-        }
+        ApplyGravity();
+        HandleInput();
+        HandleLaneMovement();
+        HandleSlideTimer();
+        HandleMagnet();
+        HandleBoostTimer();
 
+        direction.z = currentForwardSpeed;
+        controller.Move(direction * Time.deltaTime);
+
+        UpdateAnimations();
+    }
+
+    #region Movement Core
+    private void ApplyGravity()
+    {
         if (controller.isGrounded)
         {
             if (direction.y < 0) direction.y = -2f;
@@ -56,80 +85,199 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             direction.y += gravity * Time.deltaTime;
-        }
-
-        HandleInput();
-
-        float targetLaneX = 0;
-        if (desiredLane == 0) targetLaneX = -laneDistance;
-        else if (desiredLane == 2) targetLaneX = laneDistance;
-
-        laneXPos = Mathf.MoveTowards(laneXPos, targetLaneX, laneSpeed * Time.deltaTime);
-        direction.x = (laneXPos - controller.transform.position.x) / Time.deltaTime;
-        direction.z = forwardSpeed;
-
-        controller.Move(direction * Time.deltaTime);
-
-        UpdateAnimations();
-        if (isMagnetActive)
-        {
-            magnetTimer -= Time.deltaTime;
-            if (magnetTimer <= 0)
-            {
-                isMagnetActive = false;
-                Debug.Log("Magnet Deactivated");
-            }
-            else
-            {
-                Collider[] hitColliders = Physics.OverlapSphere(transform.position, MagnetRadius);
-                foreach (var hitCollider in hitColliders)
-                {
-                    if (hitCollider.CompareTag("Cheese"))
-                    {
-                        CheeseCollect cheese = hitCollider.GetComponent<CheeseCollect>();
-                        if (cheese != null)
-                        {
-                            cheese.Attract(transform);
-                        }
-                    }
-                }
-            }
-        }
-        if (isBoosting)
-        {
-            boostTimer -= Time.deltaTime;
-            if (boostTimer <= 0)
-            {
-                DeactivateBroomBoost();
-            }
+            direction.y = Mathf.Max(direction.y, maxFallSpeed);
         }
     }
 
     private void HandleInput()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow) && controller.isGrounded)
-        {
-            direction.y = jumpForce;
-            anim.SetBool("isJumping", true);
-        }
+            Jump();
 
         if (Input.GetKeyDown(KeyCode.LeftArrow) && desiredLane > 0)
-        {
-            desiredLane--;
-            anim.SetTrigger("turnLeft");
-        }
+            MoveLeft();
 
         if (Input.GetKeyDown(KeyCode.RightArrow) && desiredLane < 2)
-        {
-            desiredLane++;
-            anim.SetTrigger("turnRight");
-        }
+            MoveRight();
 
         if (Input.GetKeyDown(KeyCode.DownArrow) && controller.isGrounded && !isSliding)
-        {
             StartSlide();
+    }
+
+    private void HandleLaneMovement()
+    {
+        // 0 = left, 1 = middle, 2 = right
+        targetLaneX = (desiredLane - 1) * laneDistance;
+
+        Vector3 currentPos = transform.position;
+        Vector3 targetPos = new Vector3(targetLaneX, currentPos.y, currentPos.z);
+
+        // smooth x movement
+        Vector3 newPos = Vector3.Lerp(currentPos, targetPos, laneSpeed * Time.deltaTime);
+
+        direction.x = (newPos - currentPos).x / Time.deltaTime;
+    }
+
+    private void Jump()
+    {
+        direction.y = jumpForce;
+        anim.SetBool("isJumping", true);
+    }
+
+    private void MoveLeft()
+    {
+        desiredLane--;
+        anim.ResetTrigger("turnLeft");
+        anim.SetTrigger("turnLeft");
+    }
+
+    private void MoveRight()
+    {
+        desiredLane++;
+        anim.ResetTrigger("turnRight");
+        anim.SetTrigger("turnRight");
+    }
+    #endregion
+
+
+    #region Slide Logic
+    private void StartSlide()
+    {
+        isSliding = true;
+        slideTimer = slideDuration;
+
+        controller.height = originalHeight / 2;
+        controller.center = new Vector3(originalCenter.x, originalCenter.y / 2, originalCenter.z);
+
+        anim.SetBool("isSliding", true);
+    }
+
+    private void EndSlide()
+    {
+        isSliding = false;
+        controller.height = originalHeight;
+        controller.center = originalCenter;
+
+        anim.SetBool("isSliding", false);
+    }
+
+    private void HandleSlideTimer()
+    {
+        if (!isSliding) return;
+
+        slideTimer -= Time.deltaTime;
+        if (slideTimer <= 0) EndSlide();
+    }
+    #endregion
+
+
+    #region Magnet Logic
+    public void ActivateMagnet(float duration)
+    {
+        isMagnetActive = true;
+        magnetTimer = duration;
+        Debug.Log("Magnet Activated");
+    }
+
+    private void HandleMagnet()
+    {
+        if (!isMagnetActive) return;
+
+        magnetTimer -= Time.deltaTime;
+
+        if (magnetTimer <= 0)
+        {
+            isMagnetActive = false;
+            Debug.Log("Magnet Deactivated");
+            return;
+        }
+
+        Collider[] hits = Physics.OverlapSphere(transform.position, magnetRadius);
+        foreach (var hit in hits)
+        {
+            if (hit.CompareTag("Cheese"))
+            {
+                var cheese = hit.GetComponent<CheeseCollect>();
+                if (cheese != null)
+                    cheese.Attract(transform);
+            }
         }
     }
+    #endregion
+
+
+    #region Boost Logic
+    public void ActivateBroomBoost(float duration)
+    {
+        if (isBoosting) return;
+
+        isBoosting = true;
+        boostTimer = duration;
+
+        currentForwardSpeed = baseForwardSpeed * boostSpeedMultiplier;
+
+        if (boostVfx != null) boostVfx.Play();
+
+        Debug.Log("Boost Activated");
+    }
+
+    private void HandleBoostTimer()
+    {
+        if (!isBoosting) return;
+
+        boostTimer -= Time.deltaTime;
+
+        if (boostTimer <= 0)
+            DeactivateBoost();
+    }
+
+    private void DeactivateBoost()
+    {
+        isBoosting = false;
+        currentForwardSpeed = baseForwardSpeed;
+
+        if (boostVfx != null) boostVfx.Stop();
+
+        Debug.Log("Boost Deactivated");
+    }
+    #endregion
+
+
+    #region Shield Logic
+    public void ActivateShield()
+    {
+        isShieldActive = true;
+        if (shieldVisual != null) shieldVisual.SetActive(true);
+
+        Debug.Log("Shield Activated");
+    }
+    #endregion
+
+
+    #region Collision Detection
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (!hit.collider.CompareTag("Obstacle")) return;
+
+        if (isBoosting)
+        {
+            Destroy(hit.gameObject);
+            return;
+        }
+
+        if (isShieldActive)
+        {
+            isShieldActive = false;
+            if (shieldVisual != null) shieldVisual.SetActive(false);
+            Destroy(hit.gameObject);
+            Debug.Log("Shield absorbed hit");
+            return;
+        }
+
+        GameOverManager.instance.TriggerGameOver();
+    }
+    #endregion
+
 
     private void UpdateAnimations()
     {
@@ -137,89 +285,6 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("isSliding", isSliding);
 
         if (controller.isGrounded && anim.GetBool("isJumping"))
-        {
             anim.SetBool("isJumping", false);
-        }
-    }
-
-    private void StartSlide()
-    {
-        isSliding = true;
-        slideTimer = slideDuration;
-        controller.height /= 2;
-        controller.center = new Vector3(controller.center.x, controller.center.y / 2, controller.center.z);
-        anim.SetBool("isSliding", true);
-    }
-
-    private void EndSlide()
-    {
-        isSliding = false;
-        controller.height *= 2;
-        controller.center = new Vector3(controller.center.x, controller.center.y * 2, controller.center.z);
-        anim.SetBool("isSliding", false);
-    }
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-       if (hit.collider.CompareTag("Obstacle"))
-        {
-            if (isBoosting)
-            {
-                Destroy(hit.gameObject);
-            }
-            else if (isShieldActive)
-            {
-                isShieldActive = false;
-                if (shieldVisual != null)
-                {
-                    shieldVisual.SetActive(false);
-                }
-                Destroy(hit.gameObject);
-                Debug.Log("Shield was used!");
-            }
-            else
-            {
-                GameOverManager.instance.TriggerGameOver();
-            }
-        }
-    }
-    public void ActivateMagnet(float duration)
-    {
-        isMagnetActive = true;
-        magnetTimer = duration;
-        Debug.Log("Magnet Activated");
-    }
-    public void ActivateShield()
-    {
-        isShieldActive = true;
-        if (shieldVisual != null)
-        {
-            shieldVisual.SetActive(true);
-        }
-        Debug.Log("Shield Activated!");
-    }
-    public void ActivateBroomBoost(float duration)
-    {
-        if (isBoosting) return; 
-
-        isBoosting = true;
-        boostTimer = duration;
-
-        forwardSpeed *= boostSpeedMultiplier;
-
-        if (boostVfx != null)
-            boostVfx.Play();
-
-        Debug.Log("Broom Boost Activated!");
-    }
-
-    private void DeactivateBroomBoost()
-    {
-        isBoosting = false;
-
-        forwardSpeed = originalForwardSpeed;
-
-        if (boostVfx != null)
-            boostVfx.Stop();
-        Debug.Log("Broom Boost Deactivated!");
     }
 }
