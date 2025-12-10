@@ -56,7 +56,7 @@ Người chơi sử dụng các phím mũi tên để điều khiển nhân vậ
 
 1.  **Clone Repository:**
     ```bash
-    git clone [LINK_REPOSITORY_CỦA_BẠN]
+    git clone git@github.com:Hoang-hai-yen/Tom-and-Jerry-cheesy-runner.git
     ```
 2.  **Mở Project:** Mở thư mục dự án bằng Unity Hub.
 3.  **Kiểm tra Thư viện:** Đảm bảo thư viện TextMeshPro đã được Import vào dự án.
