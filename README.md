@@ -60,4 +60,4 @@ Người chơi sử dụng các phím mũi tên để điều khiển nhân vậ
     ```
 2.  **Mở Project:** Mở thư mục dự án bằng Unity Hub.
 3.  **Kiểm tra Thư viện:** Đảm bảo thư viện TextMeshPro đã được Import vào dự án.
-4.  **Chạy Scene Chính:** Mở Scene chính (Scene có chứa `MapSpawner`, `Player`, `ItemPoolManager`,...) và nhấn Play trong Unity Editor.
+4.  **Chạy Scene Chính:** Mở Scene Lobby và chạy.
