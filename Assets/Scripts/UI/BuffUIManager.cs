@@ -14,7 +14,7 @@ public class BuffUIManager : MonoBehaviour
         Debug.Log("BuffUIManager Awake"); // KIỂM TRA
     }
 
-    public void AddBuff(Texture icon, float duration)
+    public BuffUIItem AddBuff(Texture icon, float duration)
     {
         Debug.Log("AddBuff CALLED");
 
@@ -23,5 +23,13 @@ public class BuffUIManager : MonoBehaviour
 
         BuffUIItem item = obj.GetComponent<BuffUIItem>();
         item.Setup(icon, duration);
+
+        return item;   // ⬅️ Trả về để Player giữ lại
+    }
+
+    public void RemoveBuff(BuffUIItem item)
+    {
+        if (item != null)
+            Destroy(item.gameObject);  // Xóa đúng buff slot
     }
 }

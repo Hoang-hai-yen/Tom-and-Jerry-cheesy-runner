@@ -19,12 +19,16 @@ public class Pause : MonoBehaviour
 
     void OpenSetting()
     {
+        AudioManager.Instance.PlayButton();
+        settingButton.gameObject.SetActive(false);
         settingPanel.SetActive(true);
         Time.timeScale = 0f;
     }
 
     void CloseSetting()
     {
+        settingButton.gameObject.SetActive(true);
+        AudioManager.Instance.PlayButton();
         settingPanel.SetActive(false);
         Time.timeScale = 1f;
     }

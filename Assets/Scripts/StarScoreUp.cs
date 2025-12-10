@@ -16,6 +16,7 @@ public class StarScoreUp : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
+        AudioManager.Instance.PlayBuff();
         ScoreManager.instance?.ActivateScoreMultiplier(multiplier, duration);
 
         BuffUIManager.Instance.AddBuff(starIcon, duration);
