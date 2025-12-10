@@ -10,7 +10,19 @@ Trò chơi được xây dựng tập trung vào hiệu suất bằng cách sử
 * **Điều khiển Cơ bản:** Cho phép người chơi di chuyển giữa ba làn đường, nhảy, và trượt để vượt qua chướng ngại vật.
 * **Power-up Đa dạng:** Cung cấp các vật phẩm tăng cường như Nam châm (hút phô mai), Tăng tốc (vượt chướng ngại vật), Khiên (bảo vệ một lần), và Nhân điểm tạm thời.
 * **Cơ chế Game Over Đuổi bắt:** Sau khi va chạm vật cản, người chơi dừng lại, kích hoạt kẻ thù (Tom) đuổi bắt có hẹn giờ, dẫn đến Game Over nếu bị bắt kịp.
-* **Hệ thống Điểm số:** Theo dõi và hiển thị điểm số (phô mai) đã thu thập, hỗ trợ tính năng nhân điểm.
+* **Tăng tốc độ theo thời gian:** Tốc độ chạy mặc định của nhân vật sẽ tăng dần theo thời gian chơi.
+* **Hệ thống Điểm số:** Theo dõi và hiển thị điểm số (phô mai) đã thu thập, bao gồm cả nhân điểm.
+
+## 🎮 Phím Điều Khiển (PC)
+
+Người chơi sử dụng các phím mũi tên để điều khiển nhân vật Jerry:
+
+| Thao tác | Phím | Logic trong Script |
+| :--- | :--- | :--- |
+| **Nhảy (Jump)** | Mũi tên **Lên** (`UpArrow`) | Kích hoạt khi nhân vật đang chạm đất (`isGrounded`). |
+| **Trượt (Slide)** | Mũi tên **Xuống** (`DownArrow`) | Thay đổi kích thước collider để trượt qua vật cản thấp. |
+| **Chuyển làn Trái** | Mũi tên **Trái** (`LeftArrow`) | Di chuyển sang làn đường bên trái. |
+| **Chuyển làn Phải** | Mũi tên **Phải** (`RightArrow`) | Di chuyển sang làn đường bên phải. |
 
 ## 🛠️ Công Nghệ và Kỹ Thuật
 
@@ -18,7 +30,7 @@ Trò chơi được xây dựng tập trung vào hiệu suất bằng cách sử
 | :--- | :--- | :--- |
 | **Engine** | Unity Engine (C#) | Nền tảng phát triển chính. |
 | **Procedural Generation** | Object Pooling + Random Weighted Pattern | Tối ưu hóa hiệu suất và tạo sự đa dạng cho đường chạy. |
-| **Đồ họa** | Pixel cartoon style tự vẽ | Phong cách đồ họa được sử dụng. |
+| **Đồ họa** | Pixel Cartoon Style tự vẽ | Phong cách đồ họa được sử dụng. |
 | **Âm thanh** | Freesound | Nguồn tài nguyên âm thanh. |
 | **Quản lý Mã nguồn** | Github | Quản lý phiên bản và theo dõi thay đổi. |
 
