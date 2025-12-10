@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
@@ -34,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Shield Settings")]
     public bool isShieldActive = false;
     public GameObject shieldVisual;
+    private float shieldTimer;
 
     [Header("Boost Settings")]
     public float boostSpeedMultiplier = 2f;
@@ -257,12 +260,39 @@ public class PlayerMovement : MonoBehaviour
 
 
     #region Shield Logic
+
+    public Texture shieldIcon;
+    private BuffUIItem shieldBuffUI;
     public void ActivateShield()
     {
         isShieldActive = true;
         if (shieldVisual != null) shieldVisual.SetActive(true);
-
         Debug.Log("Shield Activated");
+        shieldBuffUI = BuffUIManager.Instance.AddBuff(shieldIcon, 8);
+
+        StartCoroutine(AutoDisableShieldAfter(8f));
+    }
+
+    private IEnumerator AutoDisableShieldAfter(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        // Chỉ tắt khiên nếu người chơi chưa bị absorb trước đó
+        if (isShieldActive)
+            DeactivateShield();
+    }
+
+
+    public void DeactivateShield()
+    {
+        isShieldActive = false;
+        if (shieldVisual != null) shieldVisual.SetActive(false);
+
+        if (shieldBuffUI != null)
+        {
+            BuffUIManager.Instance.RemoveBuff(shieldBuffUI);
+            shieldBuffUI = null;
+        }
     }
     #endregion
 
@@ -287,8 +317,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (isShieldActive)
         {
-            isShieldActive = false;
-            if (shieldVisual != null) shieldVisual.SetActive(false);
+            DeactivateShield();
+
             Destroy(hit.gameObject);
             Debug.Log("Shield absorbed hit");
             return;

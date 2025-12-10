@@ -8030,6 +8030,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1022410811311976136, guid: 1d92e0433e11679419dbe682560ea2db, type: 3}
+      propertyPath: shieldIcon
+      value: 
+      objectReference: {fileID: 2800000, guid: 5dbedb6fe3e61e14bae43ab749312ee3, type: 3}
+    - target: {fileID: 1022410811311976136, guid: 1d92e0433e11679419dbe682560ea2db, type: 3}
       propertyPath: tomFollower
       value: 
       objectReference: {fileID: 1951913275}
