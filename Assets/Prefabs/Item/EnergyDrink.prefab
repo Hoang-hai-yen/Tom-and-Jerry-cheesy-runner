@@ -112,6 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 8
+  drinkIcon: {fileID: 2800000, guid: a86fe5726a46cca4782136386a9f34ac, type: 3}
 --- !u!114 &-1212835179674373348
 MonoBehaviour:
   m_ObjectHideFlags: 0
