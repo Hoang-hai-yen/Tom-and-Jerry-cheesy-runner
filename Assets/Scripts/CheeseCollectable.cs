@@ -38,6 +38,7 @@ public class CheeseCollect : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
+        AudioManager.Instance.PlayCheese();
         ScoreManager.instance?.AddCheese(1);
 
         ItemTagHolder tagHolder = GetComponent<ItemTagHolder>();

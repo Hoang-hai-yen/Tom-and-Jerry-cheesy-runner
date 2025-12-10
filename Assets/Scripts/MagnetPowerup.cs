@@ -45,6 +45,7 @@ public class MagnetPowerup : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
+        AudioManager.Instance.PlayBuff();
         // Apply hiệu ứng gameplay
         PlayerMovement player = other.GetComponent<PlayerMovement>();
         if (player != null)

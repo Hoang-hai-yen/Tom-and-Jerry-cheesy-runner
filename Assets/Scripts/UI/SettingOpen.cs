@@ -7,6 +7,7 @@ public class SettingButton : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        AudioManager.Instance.PlayButton();
         settingPanel.SetActive(!settingPanel.activeSelf);
     }
 }

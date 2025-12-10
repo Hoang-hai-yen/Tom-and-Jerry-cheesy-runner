@@ -52,6 +52,7 @@ public class ShieldPowerup : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
+        AudioManager.Instance.PlayBuff();
         PlayerMovement player = other.GetComponent<PlayerMovement>();
         if (player != null)
         {
