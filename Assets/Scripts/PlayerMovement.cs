@@ -47,6 +47,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Tom Follower")]
     public TomFollower tomFollower;
     public bool isStopped = false;
+    [Header("Speed Progression")]
+    public float speedIncreaseRate = 0.05f;
+    public float maxForwardSpeed = 30f;     
 
     private void Start()
     {
@@ -67,6 +70,7 @@ public class PlayerMovement : MonoBehaviour
         HandleBoostTimer();
         if (!isStopped)
         {
+            HandleSpeedProgression();
             HandleInput();
             HandleLaneMovement();
         } 
@@ -90,6 +94,19 @@ public class PlayerMovement : MonoBehaviour
         UpdateAnimations();
     }
 
+    private void HandleSpeedProgression()
+    {
+        baseForwardSpeed = Mathf.Min(
+            baseForwardSpeed + speedIncreaseRate * Time.deltaTime, 
+            maxForwardSpeed
+        );
+
+        if (!isBoosting)
+        {
+            currentForwardSpeed = baseForwardSpeed;
+        }
+    }
+    
     #region Movement Core
     private void ApplyGravity()
     {
