@@ -44,7 +44,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("VFX")]
     public ParticleSystem boostVfx;
-
+    [Header("Tom Follower")]
+    public TomFollower tomFollower;
+    public bool isStopped = false;
 
     private void Start()
     {
@@ -59,19 +61,32 @@ public class PlayerMovement : MonoBehaviour
         if (shieldVisual != null) shieldVisual.SetActive(false);
         if (boostVfx != null) boostVfx.Stop();
     }
-
     private void Update()
     {
         ApplyGravity();
-        HandleInput();
-        HandleLaneMovement();
+        HandleBoostTimer();
+        if (!isStopped)
+        {
+            HandleInput();
+            HandleLaneMovement();
+        } 
+        else
+        {
+            direction.x = 0;
+        }
+
+        if (!isStopped)
+        {
+            direction.z = currentForwardSpeed;
+            controller.Move(direction * Time.deltaTime);
+        }
+        else
+        {
+            controller.Move(new Vector3(0, direction.y, 0) * Time.deltaTime);
+        }
+
         HandleSlideTimer();
         HandleMagnet();
-        HandleBoostTimer();
-
-        direction.z = currentForwardSpeed;
-        controller.Move(direction * Time.deltaTime);
-
         UpdateAnimations();
     }
 
@@ -106,13 +121,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleLaneMovement()
     {
-        // 0 = left, 1 = middle, 2 = right
         targetLaneX = (desiredLane - 1) * laneDistance;
 
         Vector3 currentPos = transform.position;
         Vector3 targetPos = new Vector3(targetLaneX, currentPos.y, currentPos.z);
 
-        // smooth x movement
         Vector3 newPos = Vector3.Lerp(currentPos, targetPos, laneSpeed * Time.deltaTime);
 
         direction.x = (newPos - currentPos).x / Time.deltaTime;
@@ -259,6 +272,13 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!hit.collider.CompareTag("Obstacle")) return;
 
+        if (Vector3.Dot(hit.normal, Vector3.up) > 0.1f) 
+        {
+            Debug.Log("Player: Va chạm bị bỏ qua (va chạm từ trên xuống).");
+            return; 
+        }
+        
+
         if (isBoosting)
         {
             Destroy(hit.gameObject);
@@ -274,10 +294,25 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        GameOverManager.instance.TriggerGameOver();
+        currentForwardSpeed = 0f; 
+        direction.x = 0f; 
+        isStopped = true; 
+        Debug.Log("Player: Va chạm ngang thành công. Jerry dừng lại (isStopped=true)."); 
+
+        if (tomFollower != null)
+        {
+            Debug.Log("Player: Lệnh kích hoạt Catch Up đã gửi tới Tom.");
+            tomFollower.StartCatchUpSequence();
+        }
+        else
+        {
+            Debug.LogWarning("Player: TomFollower không được gán trong PlayerMovement!");
+        }
+
+        Destroy(hit.gameObject);
+        
     }
     #endregion
-
 
     private void UpdateAnimations()
     {
