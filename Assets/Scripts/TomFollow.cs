@@ -2,78 +2,87 @@ using UnityEngine;
 
 public class TomFollower : MonoBehaviour
 {
-    [Header("Target & Follow Settings")]
-    public Transform target;
-    public float followOffsetZ = 10f;     
-    public float followLerpSpeed = 6f;    
+    [Header("Target Settings")]
+    public Transform player;
+    public PlayerMovement playerMovement;
+
+    [Header("Follow Settings")]
+    public float followOffsetZ = 7f;
+    public float followLerpSpeed = 6f;
 
     [Header("Catch Up Settings")]
-    public float catchUpSpeed = 25f;     
-    public float catchDistance = 2f;     
+    public float catchDistance = 1.8f;
+    
+    private bool isCatchingUp = false;
+    private float catchUpTimer = 0f;
+    private const float CATCH_UP_DURATION = 0.5f;
+    private Vector3 catchUpStartPosition; 
 
     [Header("Gravity")]
-    public float gravity = -20f; 
+    public float gravity = -20f;
     public float maxFallSpeed = -30f;
+    private float yVelocity = 0f; 
 
     [Header("Ground Detection")]
     public float groundRayDistance = 5f;
     public LayerMask groundLayer;
     public float terrainAdjustSpeed = 12f;
+    private float yAdjustment = 0f; 
 
     private CharacterController controller;
-    private float yVelocity = 0f;
+    private Animator anim;
+    private Vector3 movementVectorXZ; 
 
-    private bool isCatchUp = false;
-    private float originalOffsetZ;
-    private float catchUpDelayTimer = 0f;
-    private const float CATCH_UP_START_DELAY = 0.2f;
-
-    void Start()
+    private void Start()
     {
-        originalOffsetZ = followOffsetZ;
-
-        if (target == null)
-        {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-                target = player.transform;
-        }
-
         controller = GetComponent<CharacterController>();
+        anim = GetComponentInChildren<Animator>();
+
+        if (player == null && playerMovement != null)
+        {
+            player = playerMovement.transform;
+        }
+        
         if (controller == null)
         {
-            Debug.LogError("TomFollower: CharacterController component is missing!");
-        }
-
-        if (target != null)
-        {
-            transform.position = new Vector3(
-                target.position.x,
-                transform.position.y,
-                target.position.z - followOffsetZ
-            );
+            Debug.LogError("TomFollower: Thiếu CharacterController!");
         }
     }
 
-    void Update()
+    private void Update()
     {
-        if (target == null || controller == null) return;
+        if (player == null || controller == null) return;
+        
+        // Ngăn lỗi nếu controller đã tắt (sau Game Over)
+        if (!controller.enabled) return; 
 
         ApplyGravity();
-
-        if (isCatchUp && catchUpDelayTimer > 0)
+        AdjustHeightToTerrain();
+        
+        if (!playerMovement.isStopped)
         {
-            catchUpDelayTimer -= Time.deltaTime;
-            controller.Move(new Vector3(0, yVelocity * Time.deltaTime, 0));
-            return;
+            movementVectorXZ = FollowPlayer();
+        }
+        else
+        {
+            movementVectorXZ = CatchUpTimed();
         }
 
-        FollowPlayerXZ();
-        AdjustHeightToTerrain();
-        CheckCatchSuccess();
+        Vector3 finalVelocity = new Vector3(
+            movementVectorXZ.x,
+            (yVelocity + yAdjustment) * Time.deltaTime,
+            movementVectorXZ.z
+        );
+
+        controller.Move(finalVelocity);
+        
+        UpdateRotation(); 
+        yAdjustment = 0f;
+
+        UpdateAnimation();
     }
 
-    void ApplyGravity()
+    private void ApplyGravity()
     {
         if (!controller.isGrounded)
         {
@@ -86,66 +95,101 @@ public class TomFollower : MonoBehaviour
         }
     }
 
-    void FollowPlayerXZ()
-    {
-        float currentSpeed = isCatchUp ? catchUpSpeed : followLerpSpeed;
-        float detZ = isCatchUp ? catchDistance : followOffsetZ;
-
-        Vector3 newPos = new Vector3(
-            target.position.x,
-            transform.position.y,
-            target.position.z - detZ
-        );
-
-        Vector3 lerped = Vector3.Lerp(transform.position, newPos, currentSpeed * Time.deltaTime);
-
-        Vector3 velocity = new Vector3(
-            lerped.x - transform.position.x,
-            yVelocity * Time.deltaTime,
-            lerped.z - transform.position.z
-        );
-
-        controller.Move(velocity);
-    }
-
-    void AdjustHeightToTerrain()
+    private void AdjustHeightToTerrain()
     {
         RaycastHit hit;
-
-        Vector3 rayOrigin = transform.position + Vector3.up * 1f;
+        Vector3 rayOrigin = transform.position + Vector3.up * 1f; 
 
         if (Physics.Raycast(rayOrigin, Vector3.down, out hit, groundRayDistance, groundLayer))
         {
             float desiredY = hit.point.y;
-            float smoothY = Mathf.Lerp(transform.position.y, desiredY, Time.deltaTime * terrainAdjustSpeed);
-
-            transform.position = new Vector3(transform.position.x, smoothY, transform.position.z);
+            float currentY = transform.position.y;
+            float heightDifference = desiredY - currentY;
+            
+            yAdjustment = heightDifference * terrainAdjustSpeed;
         }
-    }
-
-    void CheckCatchSuccess()
-    {
-        float actualDistance = Mathf.Abs(transform.position.z - (target.position.z - catchDistance));
-
-        if (isCatchUp && actualDistance < 0.4f)
+        else
         {
-            isCatchUp = false;
-            if (GameOverManager.instance != null)
-            {
-                GameOverManager.instance.TriggerGameOver();
-            }
+            yAdjustment = 0f;
         }
     }
 
     public void StartCatchUpSequence()
     {
-        isCatchUp = true;
-        catchUpDelayTimer = CATCH_UP_START_DELAY;
+        if (isCatchingUp) return;
+        
+        isCatchingUp = true;
+        catchUpTimer = 0f; 
+        
+        catchUpStartPosition = transform.position; 
     }
 
-    public void ResetFollowerDistance()
+    private Vector3 CatchUpTimed()
     {
-        followOffsetZ = originalOffsetZ;
-        isCatchUp = false;
+        if (!isCatchingUp) return Vector3.zero;
+
+        catchUpTimer += Time.deltaTime;
+
+        float t = catchUpTimer / CATCH_UP_DURATION;
+        t = Mathf.Clamp01(t); 
+
+        Vector3 finalCatchTarget = new Vector3(
+            player.position.x,
+            player.position.y + 0.1f, 
+            player.position.z - catchDistance / 2f 
+        );
+
+        Vector3 nextPos = Vector3.Lerp(
+            catchUpStartPosition,
+            finalCatchTarget,
+            t
+        );
+
+        Vector3 moveVectorXZ = new Vector3(nextPos.x - transform.position.x, 0, nextPos.z - transform.position.z);
+
+        if (t >= 1f)
+        {
+            transform.position = finalCatchTarget; 
+            controller.enabled = false; 
+
+            Debug.Log("Tom đã hoàn thành đuổi bắt. Game Over!");
+            
+            isCatchingUp = false;
+
+            if (GameOverManager.instance != null)
+                GameOverManager.instance.TriggerGameOver();
+                
+            return Vector3.zero;
+        }
+
+        return moveVectorXZ;
+    }
+
+    private Vector3 FollowPlayer()
+    {
+        Vector3 playerPos = player.position;
+        float targetZ = playerPos.z - followOffsetZ;
+        float targetX = playerPos.x;
+
+        Vector3 targetPos = new Vector3(targetX, transform.position.y, targetZ);
+
+        Vector3 lerped = Vector3.Lerp(
+            transform.position,
+            targetPos,
+            followLerpSpeed * Time.deltaTime
+        );
+        
+        return new Vector3(lerped.x - transform.position.x, 0, lerped.z - transform.position.z);
+    }
+    
+    private void UpdateRotation()
+    {
+        transform.rotation = Quaternion.LookRotation(player.forward);
+    }
+
+    void UpdateAnimation()
+    {
+        if (anim == null) return;
+        anim.SetBool("isRunning", true); 
     }
 }
