@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class ShieldPowerup : MonoBehaviour
 {
+    public float duration = 8f;
+    public Texture shieldIcon;
     void OnEnable()
     {
         ParticleSystem ps = GetComponent<ParticleSystem>();
@@ -15,6 +17,8 @@ public class ShieldPowerup : MonoBehaviour
         PlayerMovement player = other.GetComponent<PlayerMovement>();
         if (player != null)
             player.ActivateShield();
+
+        BuffUIManager.Instance.AddBuff(shieldIcon, duration);
 
         ItemTagHolder tagHolder = GetComponent<ItemTagHolder>();
         if (tagHolder != null && !string.IsNullOrEmpty(tagHolder.itemTag))

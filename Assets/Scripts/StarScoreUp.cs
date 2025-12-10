@@ -4,6 +4,7 @@ public class StarScoreUp : MonoBehaviour
 {
     public int multiplier = 2;
     public float duration = 10f;
+    public Texture starIcon;
 
     void OnEnable()
     {
@@ -16,6 +17,8 @@ public class StarScoreUp : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         ScoreManager.instance?.ActivateScoreMultiplier(multiplier, duration);
+
+        BuffUIManager.Instance.AddBuff(starIcon, duration);
 
         ItemTagHolder tagHolder = GetComponent<ItemTagHolder>();
         if (tagHolder != null && !string.IsNullOrEmpty(tagHolder.itemTag))

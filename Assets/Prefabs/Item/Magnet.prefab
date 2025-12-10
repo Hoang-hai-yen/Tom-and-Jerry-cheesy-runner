@@ -150,10 +150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 090c0e1e0f5135441b811ae7a6420c43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 3
-  magnetUI: {fileID: 0}
-  fadedAlpha: 0.6
-  fullAlpha: 1
+  duration: 5
+  magnetIcon: {fileID: 2800000, guid: 31faf574b645adb4cb2a60f5e4c2b8e1, type: 3}
 --- !u!114 &3101260564096988811
 MonoBehaviour:
   m_ObjectHideFlags: 0

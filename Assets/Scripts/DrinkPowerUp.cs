@@ -3,6 +3,7 @@ using UnityEngine;
 public class DrinkPowerUp : MonoBehaviour
 {
     public float duration = 8f;
+    public Texture drinkIcon;
 
     void OnEnable()
     {
@@ -17,6 +18,8 @@ public class DrinkPowerUp : MonoBehaviour
         PlayerMovement player = other.GetComponent<PlayerMovement>();
         if (player != null)
             player.ActivateBroomBoost(duration);
+
+        BuffUIManager.Instance.AddBuff(drinkIcon, duration);
 
         ItemTagHolder tagHolder = GetComponent<ItemTagHolder>();
         if (tagHolder != null && !string.IsNullOrEmpty(tagHolder.itemTag))
