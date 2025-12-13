@@ -1,63 +1,110 @@
-# 🚀 Jerry's Infinite Run: Endless Runner Project
+# Jerry's Infinite Run: Endless Runner Project
 
-Dự án này là một game thể loại **Endless Runner (Chạy Vô Tận)** 3D được phát triển trên Unity. Người chơi điều khiển Jerry trong một cuộc rượt đuổi không hồi kết, né tránh chướng ngại vật và thu thập phô mai.
+## Contributors
 
-Trò chơi được xây dựng tập trung vào hiệu suất bằng cách sử dụng Object Pooling và tạo môi trường vô tận theo thủ tục.
+**Leader:**
 
-## ✨ Tính Năng Cốt Lõi
+* Hoang Hai Yen – 23521847 – https://github.com/Hoang-hai-yen
 
-* **Chạy Vô tận theo Thủ tục (Procedural Generation):** Tự động sinh và ghép nối các đoạn đường (Map Chunks) liên tục được tái sử dụng từ pool.
-* **Điều khiển Cơ bản:** Cho phép người chơi di chuyển giữa ba làn đường, nhảy, và trượt để vượt qua chướng ngại vật.
-* **Power-up Đa dạng:** Cung cấp các vật phẩm tăng cường như Nam châm (hút phô mai), Tăng tốc (vượt chướng ngại vật), Khiên (bảo vệ một lần), và Nhân điểm tạm thời.
-* **Cơ chế Game Over Đuổi bắt:** Sau khi va chạm vật cản, người chơi dừng lại, kích hoạt kẻ thù (Tom) đuổi bắt có hẹn giờ, dẫn đến Game Over nếu bị bắt kịp.
-* **Tăng tốc độ theo thời gian:** Tốc độ chạy mặc định của nhân vật sẽ tăng dần theo thời gian chơi.
-* **Hệ thống Điểm số:** Theo dõi và hiển thị điểm số (phô mai) đã thu thập, bao gồm cả nhân điểm.
+**Members:**
 
-## 🎮 Phím Điều Khiển (PC)
+* Dang Pham Nguyet Sang – 23521336 – https://github.com/Sanniverse
 
-Người chơi sử dụng các phím mũi tên để điều khiển nhân vật Jerry:
+**Supervisors:**
 
-| Thao tác | Phím | Logic trong Script |
-| :--- | :--- | :--- |
-| **Nhảy (Jump)** | Mũi tên **Lên** (`UpArrow`) | Kích hoạt khi nhân vật đang chạm đất (`isGrounded`). |
-| **Trượt (Slide)** | Mũi tên **Xuống** (`DownArrow`) | Thay đổi kích thước collider để trượt qua vật cản thấp. |
-| **Chuyển làn Trái** | Mũi tên **Trái** (`LeftArrow`) | Di chuyển sang làn đường bên trái. |
-| **Chuyển làn Phải** | Mũi tên **Phải** (`RightArrow`) | Di chuyển sang làn đường bên phải. |
+* Quan Chi Khanh An – anqck@uit.edu.vn
 
-## 🛠️ Công Nghệ và Kỹ Thuật
+---
 
-| Hạng mục | Công nghệ/Kỹ thuật | Chi tiết |
-| :--- | :--- | :--- |
-| **Engine** | Unity Engine (C#) | Nền tảng phát triển chính. |
-| **Procedural Generation** | Object Pooling + Random Weighted Pattern | Tối ưu hóa hiệu suất và tạo sự đa dạng cho đường chạy. |
-| **Đồ họa** | Pixel Cartoon Style tự vẽ | Phong cách đồ họa được sử dụng. |
-| **Âm thanh** | Freesound | Nguồn tài nguyên âm thanh. |
-| **Quản lý Mã nguồn** | Github | Quản lý phiên bản và theo dõi thay đổi. |
+## Description
 
-## 📦 Cấu trúc Script Cốt lõi
+**Jerry's Infinite Run** is a 3D **Endless Runner** game developed using **Unity Engine**. The player controls Jerry in an endless chase, dodging obstacles, collecting cheese, and surviving as long as possible while being pursued by Tom.
 
-| File | Chức năng |
-| :--- | :--- |
-| `PlayerMovement.cs` | Logic điều khiển người chơi (di chuyển, nhảy, trượt, quản lý buff). |
-| `TomFollower.cs` | Logic AI kẻ thù, xử lý cơ chế đuổi bắt Game Over. |
-| `MapSpawner.cs` | Quản lý việc sinh và hủy các Map Chunk vô tận. |
-| `ItemPoolManager.cs` | Hệ thống Object Pooling trung tâm cho các vật phẩm và Pattern. |
-| `ScoreManager.cs` | Theo dõi và quản lý điểm số, bao gồm cả nhân điểm. |
-| `GameOverManager.cs` | Xử lý việc dừng game và hiển thị điểm cuối cùng. |
+The project focuses heavily on **performance optimization** and **scalability**, utilizing **Object Pooling** and **Procedural Generation** to create an infinite running environment with minimal memory overhead. As the game progresses, the difficulty increases through higher running speed and more complex obstacle patterns.
 
-## 💻 Thiết lập và Khởi động Project
+Core gameplay elements include lane-based movement, jumping, sliding, collectible-based scoring, temporary power-ups, and a unique **chase-based Game Over mechanic** where the enemy actively captures the player instead of an instant failure.
 
-### Yêu cầu
+---
 
-* Unity Editor (Phiên bản tương thích).
-* Visual Studio hoặc IDE tương thích với C#.
+## How to Use
 
-### Hướng dẫn
+### Requirements
 
-1.  **Clone Repository:**
-    ```bash
-    git clone git@github.com:Hoang-hai-yen/Tom-and-Jerry-cheesy-runner.git
-    ```
-2.  **Mở Project:** Mở thư mục dự án bằng Unity Hub.
-3.  **Kiểm tra Thư viện:** Đảm bảo thư viện TextMeshPro đã được Import vào dự án.
-4.  **Chạy Scene Chính:** Mở Scene Lobby và chạy.
+* Unity Editor (compatible version)
+* Visual Studio or any C#-supported IDE
+
+### Setup Instructions
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone git@github.com:Hoang-hai-yen/Tom-and-Jerry-cheesy-runner.git
+   ```
+
+2. **Open the project:**
+
+   * Launch Unity Hub
+   * Select **Open Project** and choose the cloned folder
+
+3. **Verify dependencies:**
+
+   * Ensure **TextMeshPro** is imported and properly configured
+
+4. **Run the game:**
+
+   * Open the **Lobby** scene
+   * Press **Play** in the Unity Editor
+
+### Controls (PC)
+
+| Action     | Key         |
+| ---------- | ----------- |
+| Jump       | Up Arrow    |
+| Slide      | Down Arrow  |
+| Move Left  | Left Arrow  |
+| Move Right | Right Arrow |
+
+---
+
+## Additional Information
+
+### Core Features
+
+* Procedural infinite map generation using reusable map chunks
+* Centralized object pooling system for obstacles, items, and patterns
+* Gradually increasing player speed for difficulty scaling
+* Multiple power-ups: Magnet, Speed Boost, Shield, and Score Multiplier
+* Cheese-based scoring system with temporary multipliers
+* Enemy chase system triggering delayed Game Over
+
+### Core Scripts
+
+| Script               | Responsibility                                       |
+| -------------------- | ---------------------------------------------------- |
+| `PlayerMovement.cs`  | Player movement, jumping, sliding, and buff handling |
+| `TomFollower.cs`     | Enemy AI and chase-based Game Over logic             |
+| `MapSpawner.cs`      | Infinite map chunk spawning and recycling            |
+| `ItemPoolManager.cs` | Central object pooling manager                       |
+| `ScoreManager.cs`    | Score tracking and multiplier logic                  |
+| `GameOverManager.cs` | Game state handling and final score display          |
+
+---
+
+## Code of Conduct
+
+This project follows standard academic and open-source integrity principles:
+
+* No plagiarism of third-party code without attribution
+* Respectful collaboration among contributors
+* Clear documentation of external assets and libraries
+* Proper use of version control and commit history
+
+---
+
+## License
+
+This project is released under the **MIT License**, allowing free use, modification, and distribution for educational and non-commercial purposes unless stated otherwise.
+
+---
+
+*Developed with Unity & C#* 🎮
