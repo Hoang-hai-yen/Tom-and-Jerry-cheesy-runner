@@ -69,17 +69,23 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
-        ApplyGravity();
-        HandleBoostTimer();
         if (!isStopped)
         {
             HandleSpeedProgression();
             HandleInput();
             HandleLaneMovement();
-        } 
+        }
+
+        if (PlayerFlyController.Instance != null && PlayerFlyController.Instance.IsFlying)
+        {
+            float targetY = PlayerFlyController.Instance.CurrentTargetY;
+            float newY = Mathf.Lerp(transform.position.y, targetY, Time.deltaTime * PlayerFlyController.Instance.transitionSpeed);
+            
+            direction.y = (newY - transform.position.y) / Time.deltaTime;
+        }
         else
         {
-            direction.x = 0;
+            ApplyGravity();
         }
 
         if (!isStopped)
@@ -113,6 +119,12 @@ public class PlayerMovement : MonoBehaviour
     #region Movement Core
     private void ApplyGravity()
     {
+        if (PlayerFlyController.Instance != null && PlayerFlyController.Instance.IsFlying)
+        {
+            direction.y = 0; 
+            return;
+        }
+
         if (controller.isGrounded)
         {
             if (direction.y < 0) direction.y = -2f;
@@ -126,7 +138,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) && controller.isGrounded)
+        bool isFlying = PlayerFlyController.Instance != null && PlayerFlyController.Instance.IsFlying;
+
+        if (Input.GetKeyDown(KeyCode.UpArrow) && controller.isGrounded && !isFlying)
             Jump();
 
         if (Input.GetKeyDown(KeyCode.LeftArrow) && desiredLane > 0)
@@ -135,7 +149,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightArrow) && desiredLane < 2)
             MoveRight();
 
-        if (Input.GetKeyDown(KeyCode.DownArrow) && controller.isGrounded && !isSliding)
+        if (Input.GetKeyDown(KeyCode.DownArrow) && controller.isGrounded && !isSliding && !isFlying)
             StartSlide();
     }
 

@@ -7608,6 +7608,7 @@ MonoBehaviour:
   - {fileID: 1706677032577466233}
   - {fileID: 6291554932559733065}
   despawnZ: -50
+  isAirPattern: 0
 --- !u!65 &6387577322377173054
 BoxCollider:
   m_ObjectHideFlags: 0
