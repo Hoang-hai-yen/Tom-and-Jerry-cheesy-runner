@@ -114,7 +114,7 @@ Transform:
   m_GameObject: {fileID: 227176173045748582}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 2.6, y: 1.5, z: 49}
+  m_LocalPosition: {x: 2, y: 1.5, z: 49}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -792,7 +792,7 @@ Transform:
   m_GameObject: {fileID: 2294269088866024274}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 2.5, y: 1.5, z: -11.2}
+  m_LocalPosition: {x: 2, y: 1.5, z: -11.2}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -900,7 +900,7 @@ Transform:
   m_GameObject: {fileID: 2350887654551752659}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.1, y: 1.5, z: 37.5}
+  m_LocalPosition: {x: 0, y: 1.5, z: 37.5}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1067,52 +1067,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &2636261011193798408
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5402334154264955463}
-  - component: {fileID: 6159057831113889935}
-  m_Layer: 0
-  m_Name: Cheese (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5402334154264955463
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2636261011193798408}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.81, y: 2.45, z: -14.89}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 742350894467239324}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6159057831113889935
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2636261011193798408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98e8836156111974193580d2b9a78a6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemTag: Cheese
-  spawnChance: 100
 --- !u!1 &2763338226268340903
 GameObject:
   m_ObjectHideFlags: 0
@@ -1507,7 +1461,7 @@ Transform:
   m_GameObject: {fileID: 3281629502312072347}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1.74, y: 1.5, z: 1.66}
+  m_LocalPosition: {x: -2, y: 1.5, z: 1.66}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1959,7 +1913,7 @@ Transform:
   m_GameObject: {fileID: 3756523132468858415}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.4, y: 1.5, z: 23.2}
+  m_LocalPosition: {x: 0, y: 1.5, z: 23.2}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2039,52 +1993,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5938601, y: 0.6042975, z: 0.5290388}
   m_Center: {x: -0.0025480706, y: 0.0062406803, z: 0.2645193}
---- !u!1 &3809518738786416601
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1293019195493807248}
-  - component: {fileID: 5672365194643856422}
-  m_Layer: 0
-  m_Name: Cheese (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1293019195493807248
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3809518738786416601}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.39, y: 2.45, z: -14.89}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 742350894467239324}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5672365194643856422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3809518738786416601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98e8836156111974193580d2b9a78a6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemTag: Cheese
-  spawnChance: 100
 --- !u!1 &4194669375156561774
 GameObject:
   m_ObjectHideFlags: 0
@@ -2285,7 +2193,7 @@ Transform:
   m_GameObject: {fileID: 4475543339974984758}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.3, y: 1.5, z: 52.7}
+  m_LocalPosition: {x: 0, y: 1.5, z: 52.7}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2393,7 +2301,7 @@ Transform:
   m_GameObject: {fileID: 4521982914205371866}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 2.8, y: 1.5, z: 37.5}
+  m_LocalPosition: {x: 2, y: 1.5, z: 37.5}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2781,7 +2689,7 @@ Transform:
   m_GameObject: {fileID: 5180972467639183571}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1.74, y: 1.5, z: 13.82}
+  m_LocalPosition: {x: -2, y: 1.5, z: 13.82}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2887,7 +2795,7 @@ Transform:
   m_GameObject: {fileID: 5457470289552782721}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.45, z: -17.25}
+  m_LocalPosition: {x: 0, y: 3, z: -17.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2905,7 +2813,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98e8836156111974193580d2b9a78a6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemTag: Magnet
+  itemTag: Jetpack
   spawnChance: 100
 --- !u!1 &5502994039755270731
 GameObject:
@@ -3109,7 +3017,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 049dd96380c783141b926d3a16d7cbe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patternLinks: []
+  patternLinks:
+  - description: 
+    anchorPoint: {fileID: 440627802015644306}
+    poolTag: Pattern_Cheese_Air
+    spawnChance: 100
 --- !u!114 &8325841967320175154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3126,10 +3038,8 @@ MonoBehaviour:
   laneWidth: 2
   spawnPoints:
   - {fileID: 3973098932547487696}
-  - {fileID: 5511763402838701926}
-  - {fileID: 5672365194643856422}
-  - {fileID: 6159057831113889935}
   despawnZ: -50
+  isAirPattern: 0
 --- !u!1 &6165930677816784844
 GameObject:
   m_ObjectHideFlags: 0
@@ -3302,52 +3212,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &6839944923430196485
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7969706765958672915}
-  - component: {fileID: 5511763402838701926}
-  m_Layer: 0
-  m_Name: Cheese
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7969706765958672915
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6839944923430196485}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.45, z: -14.89}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 742350894467239324}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5511763402838701926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6839944923430196485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98e8836156111974193580d2b9a78a6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemTag: Cheese
-  spawnChance: 100
 --- !u!1 &6952482674504173216
 GameObject:
   m_ObjectHideFlags: 0
@@ -3378,9 +3242,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8953643300579647987}
-  - {fileID: 7969706765958672915}
-  - {fileID: 1293019195493807248}
-  - {fileID: 5402334154264955463}
+  - {fileID: 440627802015644306}
   m_Father: {fileID: 2605132880484074376}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7196210238672923450
@@ -3411,7 +3273,7 @@ Transform:
   m_GameObject: {fileID: 7196210238672923450}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 2.6, y: 1.5, z: 56.2}
+  m_LocalPosition: {x: -2, y: 1.5, z: 56.2}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3691,7 +3553,7 @@ Transform:
   m_GameObject: {fileID: 7712431807318848614}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 2.49, y: 1.5, z: 13.82}
+  m_LocalPosition: {x: 2, y: 1.5, z: 13.82}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4029,6 +3891,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8403892707884402125
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 440627802015644306}
+  m_Layer: 0
+  m_Name: Cheeseair
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &440627802015644306
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8403892707884402125}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 15, z: 30}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 742350894467239324}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9036837157511614999
 GameObject:
   m_ObjectHideFlags: 0

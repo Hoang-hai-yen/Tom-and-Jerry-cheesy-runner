@@ -30,25 +30,27 @@ public class ChunkPatternSpawner : MonoBehaviour
 
     void SpawnPatterns()
     {
-        if (patternLinks == null || patternLinks.Count == 0) return;
+        bool isFlying = PlayerFlyController.Instance != null && PlayerFlyController.Instance.IsFlying;
 
         foreach (var link in patternLinks)
         {
-            if (link.anchorPoint == null || string.IsNullOrEmpty(link.poolTag)) continue;
+            if (link.anchorPoint == null) continue;
+            string finalTag = isFlying ? GetAirTag(link.poolTag) : link.poolTag;
+
             if (Random.Range(0f, 100f) > link.spawnChance) continue;
 
-            // Lấy pattern từ pool
-            GameObject patternPrefab = ItemPoolManager.instance.GetItem(link.poolTag);
-            if (patternPrefab == null) continue;
+            GameObject patternObj = ItemPoolManager.instance.GetItem(finalTag);
+            if (patternObj == null) continue;
 
-            patternPrefab.transform.position = link.anchorPoint.position;
-            patternPrefab.transform.rotation = link.anchorPoint.rotation;
-            patternPrefab.transform.SetParent(this.transform);
-            patternPrefab.SetActive(true);
-
-            link.activePattern = patternPrefab;
+            patternObj.transform.position = link.anchorPoint.position;
+            patternObj.transform.rotation = link.anchorPoint.rotation;
+            patternObj.transform.SetParent(this.transform);
+            patternObj.SetActive(true);
+            link.activePattern = patternObj;
         }
     }
+
+    string GetAirTag(string groundTag) => groundTag + "_Air";
 
     public void ReturnActivePatternsToPool()
     {

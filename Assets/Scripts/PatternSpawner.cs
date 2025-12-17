@@ -14,6 +14,7 @@ public class PatternSpawner : MonoBehaviour
     public float despawnZ = -20f;                  
 
     private List<GameObject> activeItems = new List<GameObject>();
+    public bool isAirPattern;
 
     void OnEnable()
     {
@@ -35,6 +36,10 @@ public class PatternSpawner : MonoBehaviour
             if (Random.Range(0f, 100f) > config.spawnChance) continue;
 
             Vector3 spawnPos = config.transform.position; 
+            if (isAirPattern && PlayerFlyController.Instance != null)
+            {
+                spawnPos.y = PlayerFlyController.Instance.flyHeight;
+            }
             GameObject item = ItemPoolManager.instance.GetItem(config.itemTag);
             if (item != null)
             {
