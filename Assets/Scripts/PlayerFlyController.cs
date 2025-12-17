@@ -5,18 +5,24 @@ public class PlayerFlyController : MonoBehaviour
 {
     public static PlayerFlyController Instance;
 
+    [Header("Model Settings")]
+    public GameObject normalModel; 
+    public GameObject flyingModel; 
+
     [Header("Settings")]
     public float flyHeight = 5f;
     public float transitionSpeed = 5f;
     
     public bool IsFlying { get; private set; }
-    
     public float CurrentTargetY { get; private set; }
 
     void Awake() => Instance = this;
 
     public void StartFly(float duration)
     {
+        PlayerMovement player = GetComponent<PlayerMovement>();
+        if (player != null) player.DeactivateBoost();
+
         StopAllCoroutines();
         StartCoroutine(FlyRoutine(duration));
     }
@@ -24,15 +30,17 @@ public class PlayerFlyController : MonoBehaviour
     private IEnumerator FlyRoutine(float duration)
     {
         IsFlying = true;
-        float elapsed = 0;
-        while (elapsed < duration)
-        {
-            CurrentTargetY = flyHeight;
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
+        CurrentTargetY = flyHeight;
+
+        if (normalModel != null) normalModel.SetActive(false);
+        if (flyingModel != null) flyingModel.SetActive(true);
+
+        yield return new WaitForSeconds(duration);
 
         IsFlying = false;
-        CurrentTargetY = 0;
+        CurrentTargetY = 0f;
+
+        if (normalModel != null) normalModel.SetActive(true);
+        if (flyingModel != null) flyingModel.SetActive(false);
     }
 }

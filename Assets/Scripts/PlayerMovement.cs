@@ -73,6 +73,7 @@ public class PlayerMovement : MonoBehaviour
         {
             HandleSpeedProgression();
             HandleInput();
+            HandleBoostTimer(); 
             HandleLaneMovement();
         }
 
@@ -256,16 +257,14 @@ public class PlayerMovement : MonoBehaviour
     #region Boost Logic
     public void ActivateBroomBoost(float duration)
     {
-        if (isBoosting) return;
+        if (PlayerFlyController.Instance != null && PlayerFlyController.Instance.IsFlying) return;
 
         isBoosting = true;
-        boostTimer = duration;
+        boostTimer = duration; 
 
         currentForwardSpeed = baseForwardSpeed * boostSpeedMultiplier;
 
         if (boostVfx != null) boostVfx.Play();
-
-        Debug.Log("Boost Activated");
     }
 
     private void HandleBoostTimer()
@@ -278,13 +277,14 @@ public class PlayerMovement : MonoBehaviour
             DeactivateBoost();
     }
 
-    private void DeactivateBoost()
+    public void DeactivateBoost() 
     {
         isBoosting = false;
+        boostTimer = 0; 
         currentForwardSpeed = baseForwardSpeed;
 
         if (boostVfx != null) boostVfx.Stop();
-
+        
         Debug.Log("Boost Deactivated");
     }
     #endregion
@@ -308,7 +308,6 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
 
-        // Chỉ tắt khiên nếu người chơi chưa bị absorb trước đó
         if (isShieldActive)
             DeactivateShield();
     }
@@ -332,6 +331,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (!hit.collider.CompareTag("Obstacle")) return;
+        if (PlayerFlyController.Instance != null && PlayerFlyController.Instance.IsFlying) return;
 
         if (Vector3.Dot(hit.normal, Vector3.up) > 0.1f) 
         {
@@ -377,7 +377,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateAnimations()
     {
-        anim.SetBool("isRunning", controller.isGrounded && !isSliding && direction.z > 0);
+        bool isFlying = PlayerFlyController.Instance != null && PlayerFlyController.Instance.IsFlying;
+
+        anim.SetBool("isRunning", controller.isGrounded && !isSliding && direction.z > 0 && !isFlying);
         anim.SetBool("isSliding", isSliding);
 
         if (controller.isGrounded && anim.GetBool("isJumping"))

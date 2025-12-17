@@ -14,7 +14,10 @@ public class DrinkPowerUp : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-
+    if (PlayerFlyController.Instance != null && PlayerFlyController.Instance.IsFlying)
+        {
+            return;
+        }
         AudioManager.Instance.PlayBuff();
         PlayerMovement player = other.GetComponent<PlayerMovement>();
         if (player != null)
