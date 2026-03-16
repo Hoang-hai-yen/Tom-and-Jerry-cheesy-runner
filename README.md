@@ -1,110 +1,108 @@
-# Jerry's Infinite Run: Endless Runner Project
+# 🧀 Tom and Jerry: Chessy Runner
 
-## Contributors
+> A 3D Endless Runner game built with Unity — dodge obstacles, collect cheese, and survive Tom's relentless chase!
 
-**Leader:**
+🎮 **[Play on itch.io](https://zussic.itch.io/tom-and-jerry-chessy-runner)**
 
-* Hoang Hai Yen – 23521847 – https://github.com/Hoang-hai-yen
+![Screenshot](https://img.itch.zone/aW1hZ2UvNDEwOTE0OC8yNDYwMjY4NS5wbmc=/250x600/FQdjvQ.png)
+![Screenshot](https://img.itch.zone/aW1hZ2UvNDEwOTE0OC8yNDYwMjY5Mi5wbmc=/250x600/T55cvO.png)
+![Screenshot](https://img.itch.zone/aW1hZ2UvNDEwOTE0OC8yNDYwMjY5OS5wbmc=/250x600/TQ%2FAnU.png)
 
-**Members:**
-
-* Dang Pham Nguyet Sang – 23521336 – https://github.com/Sanniverse
-
-**Supervisors:**
-
-* Quan Chi Khanh An – anqck@uit.edu.vn
+![Unity](https://img.shields.io/badge/Unity-000000?style=for-the-badge&logo=unity&logoColor=white)
+![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-HTML5%20%7C%20PC-blue?style=for-the-badge)
 
 ---
 
-## Description
+## 📖 Description
 
-**Jerry's Infinite Run** is a 3D **Endless Runner** game developed using **Unity Engine**. The player controls Jerry in an endless chase, dodging obstacles, collecting cheese, and surviving as long as possible while being pursued by Tom.
+**Tom and Jerry: Chessy Runner** is a 3D endless runner inspired by the classic cartoon. The player controls Jerry in an infinite chase, dodging obstacles, collecting cheese, and surviving as long as possible while Tom actively hunts them down.
 
-The project focuses heavily on **performance optimization** and **scalability**, utilizing **Object Pooling** and **Procedural Generation** to create an infinite running environment with minimal memory overhead. As the game progresses, the difficulty increases through higher running speed and more complex obstacle patterns.
-
-Core gameplay elements include lane-based movement, jumping, sliding, collectible-based scoring, temporary power-ups, and a unique **chase-based Game Over mechanic** where the enemy actively captures the player instead of an instant failure.
+The project emphasizes **performance optimization** and **scalability**, leveraging **Object Pooling** and **Procedural Generation** to deliver a smooth infinite-running experience with minimal memory overhead.
 
 ---
 
-## How to Use
+## 🎮 Gameplay
+
+- **Run forever** — the map generates infinitely using procedural chunk spawning
+- **Dodge obstacles** — jump, slide, and switch lanes to avoid barriers
+- **Collect cheese** — rack up your score with cheese pickups and multipliers
+- **Use power-ups** — Magnet, Speed Boost, Shield, and Score Multiplier
+- **Survive Tom** — Tom chases you; if he catches up, it's Game Over
+
+---
+
+## 🕹️ Controls
+
+| Action | Key |
+|--------|-----|
+| Jump | `↑` Up Arrow |
+| Slide | `↓` Down Arrow |
+| Move Left | `←` Left Arrow |
+| Move Right | `→` Right Arrow |
+
+---
+
+## ✨ Core Features
+
+- **Procedural infinite map generation** using reusable map chunks
+- **Object Pooling system** for obstacles, items, and map segments — minimal GC pressure
+- **Gradually increasing speed** for dynamic difficulty scaling
+- **4 Power-ups**: Magnet, Speed Boost, Shield, Score Multiplier
+- **Enemy chase mechanic** — Tom follows the player with a delayed Game Over trigger
+- **Cheese-based scoring** with temporary multipliers
+
+---
+
+## 🛠️ Core Scripts
+
+| Script | Responsibility |
+|--------|---------------|
+| `PlayerMovement.cs` | Player movement, jumping, sliding, and buff handling |
+| `TomFollower.cs` | Enemy AI and chase-based Game Over logic |
+| `MapSpawner.cs` | Infinite map chunk spawning and recycling |
+| `ItemPoolManager.cs` | Central object pooling manager |
+| `ScoreManager.cs` | Score tracking and multiplier logic |
+| `GameOverManager.cs` | Game state handling and final score display |
+
+---
+
+## ⚙️ Tech Stack
+
+- **Engine**: Unity
+- **Language**: C#
+- **Rendering**: ShaderLab / HLSL (custom shaders)
+- **Version Control**: Git
+
+---
+
+## 🚀 Getting Started
 
 ### Requirements
+- Unity Editor (2021.3 LTS or compatible)
+- Visual Studio or any C#-supported IDE
 
-* Unity Editor (compatible version)
-* Visual Studio or any C#-supported IDE
-
-### Setup Instructions
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone git@github.com:Hoang-hai-yen/Tom-and-Jerry-cheesy-runner.git
-   ```
-
-2. **Open the project:**
-
-   * Launch Unity Hub
-   * Select **Open Project** and choose the cloned folder
-
-3. **Verify dependencies:**
-
-   * Ensure **TextMeshPro** is imported and properly configured
-
-4. **Run the game:**
-
-   * Open the **Lobby** scene
-   * Press **Play** in the Unity Editor
-
-### Controls (PC)
-
-| Action     | Key         |
-| ---------- | ----------- |
-| Jump       | Up Arrow    |
-| Slide      | Down Arrow  |
-| Move Left  | Left Arrow  |
-| Move Right | Right Arrow |
+### Setup
+```bash
+git clone https://github.com/Hoang-hai-yen/Tom-and-Jerry-cheesy-runner.git
+```
+1. Open Unity Hub → **Open Project** → select the cloned folder
+2. Ensure **TextMeshPro** is imported
+3. Open the **Lobby** scene → Press **Play**
 
 ---
 
-## Additional Information
+## 👥 Contributors
 
-### Core Features
+| Name | Student ID | GitHub |
+|------|-----------|--------|
+| Hoang Hai Yen *(Leader)* | 23521847 | [@Hoang-hai-yen](https://github.com/Hoang-hai-yen) |
+| Dang Pham Nguyet Sang | 23521336 | [@Sanniverse](https://github.com/Sanniverse) |
 
-* Procedural infinite map generation using reusable map chunks
-* Centralized object pooling system for obstacles, items, and patterns
-* Gradually increasing player speed for difficulty scaling
-* Multiple power-ups: Magnet, Speed Boost, Shield, and Score Multiplier
-* Cheese-based scoring system with temporary multipliers
-* Enemy chase system triggering delayed Game Over
-
-### Core Scripts
-
-| Script               | Responsibility                                       |
-| -------------------- | ---------------------------------------------------- |
-| `PlayerMovement.cs`  | Player movement, jumping, sliding, and buff handling |
-| `TomFollower.cs`     | Enemy AI and chase-based Game Over logic             |
-| `MapSpawner.cs`      | Infinite map chunk spawning and recycling            |
-| `ItemPoolManager.cs` | Central object pooling manager                       |
-| `ScoreManager.cs`    | Score tracking and multiplier logic                  |
-| `GameOverManager.cs` | Game state handling and final score display          |
+**Supervisor:** Quan Chi Khanh An — anqck@uit.edu.vn
 
 ---
 
-## Code of Conduct
+## 📄 License
 
-This project follows standard academic and open-source integrity principles:
-
-* No plagiarism of third-party code without attribution
-* Respectful collaboration among contributors
-* Clear documentation of external assets and libraries
-* Proper use of version control and commit history
-
----
-
-## License
-
-This project is released under the **MIT License**, allowing free use, modification, and distribution for educational and non-commercial purposes unless stated otherwise.
-
----
-
-*Developed with Unity & C#* 🎮
+This project is released under the **MIT License** — free to use, modify, and distribute for educational and non-commercial purposes.
